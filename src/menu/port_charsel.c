@@ -638,7 +638,7 @@ if (*topRow < 0) {
     /* the cursor over the chips, and how far down the list is */
     if (row >= *topRow && row < *topRow + sVisibleRows) {
         f32 x0 = CS_GRID_X + gapW + col * (cellW + gapW);
-        f32 y0 = CS_GRID_Y + (row - sTopRowOf[sNow]) * (CS_CELL_H + CS_GAP);
+        f32 y0 = CS_GRID_Y + (row - *topRow) * (CS_CELL_H + CS_GAP);
         s32 glow = 0x50 + ((sTick & 31) < 16 ? (sTick & 31) : 31 - (sTick & 31)) * 3;
 
         pulse = Ps_Rgba(0xFF, 0xD8, 0x30, 0x80);
