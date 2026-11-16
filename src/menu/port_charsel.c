@@ -1353,9 +1353,9 @@ for (i = 0; i < 2; i++) {
     Cs_GridCursor();
 
     if (i == 0) {
-        Cs_Details(8.0f, 178.0f, 270.0f, 0.0f);
+        Cs_Details(8.0f, 178.0f, 300.0f, 0.0f);
     } else {
-        Cs_Details(334.0f, 504.0f, 270.0f, 0.0f);
+        Cs_Details(334.0f, 504.0f, 300.0f, 0.0f);
     }
         }
     } else {
