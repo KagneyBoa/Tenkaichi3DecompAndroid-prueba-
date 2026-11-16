@@ -68,7 +68,7 @@ extern void Sprite_DrawList(void *res, s32 x, s32 y, CsSprite *list);
 #define GS_CHIP_ON 0x26 /* the chips drawn from here are enlarged when decoded */
 #define GS_CHIP_OFF 0x27
 
-#define CS_VIS_ROWS 6
+static PORT_HOST s32 sVisibleRows = 6;
 #define CS_WAIT 10 /* frames the cursor rests on a fighter before its model is read */
 
 /* Host variables: what one machine shows (its own side, its timers) is not part of the game's state. */
