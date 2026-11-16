@@ -1233,6 +1233,32 @@ static f32 Cs_GridWidth(void) {
 /* The roster's measures: beside the fighter on a wide window; on a narrower one, or in a half, smaller with the details
    under it, and as small as it takes to leave a fighter its room (a chip is 48 across for 41 down). */
 static void Cs_Place(s32 side) {
+    if (sSplit) {
+        /* One shared, centered roster for both players. */
+        CS_CELL_H = 22.0f;
+        CS_GAP = 2.0f;
+        CS_GRID_Y = 34.0f;
+        CS_GRID_X = (512.0f - Cs_GridWidth()) * 0.5f;
+    } else if (sNarrow) {
+        f32 room = 235.0f;
+        f32 tall = ((room / sAcrossPerDown - 2.0f) / (f32)MCHR_COLS - 2.0f) * 41.0f / 48.0f;
+
+        CS_CELL_H = tall < 31.0f ? tall : 31.0f;
+        if (!sV.isTeam && tall > 36.0f) {
+            CS_CELL_H = 36.0f;
+        } else if (!sV.isTeam && tall > 31.0f) {
+            CS_CELL_H = tall;
+        }
+        CS_GAP = 2.0f;
+        CS_GRID_Y = 34.0f;
+        CS_GRID_X = 6.0f;
+    } else {
+        CS_CELL_H = 47.0f;
+        CS_GAP = 3.0f;
+        CS_GRID_Y = 62.0f;
+        CS_GRID_X = 10.0f;
+    }
+}
     if (sSplit || sNarrow) {
         f32 room = sSplit ? 150.0f : 235.0f; /* across, in the window's units */
         f32 tall = ((room / sAcrossPerDown - 2.0f) / (f32)MCHR_COLS - 2.0f) * 41.0f / 48.0f;
