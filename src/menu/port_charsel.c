@@ -579,67 +579,7 @@ static void Cs_Portrait(f32 middle, f32 height) {
     Cs_Tex(res, middle - across * 0.5f, 34.0f, middle + across * 0.5f, 34.0f + height, 0, 0, w, h, 0x80, (s32)(sV.faceAlpha * 128.0f));
 }
 
-static void Cs_Grid(void) {
-    s32 custom = sV.showCustom;
-    CsCell *cells = custom ? sV.custom : sV.cells;
-    s32 count = custom ? sV.customCount : sV.cellCount;
-    s32 rows = (count + MCHR_COLS - 1) / MCHR_COLS;
-    s32 col = custom ? sV.customCol : sV.col;
-    s32 row = custom ? sV.customRow : sV.row;
-    f32 cellW = Cs_UnitsAcross(CS_CELL_H) * 48.0f / 41.0f;
-    f32 gapW = Cs_UnitsAcross(CS_GAP);
-    f32 panelR = CS_GRID_X + (cellW + gapW) * MCHR_COLS + gapW;
-    u32 pulse;
-    s32 r;
-    s32 c;
-    s32 *topRow;
-    s32 followRow;
 
-    if (row < sTopRowOf[sNow]) {
-        sTopRowOf[sNow] = row;
-    }
-    /* Both players share the same scroll position in the normal roster. */
-topRow = (sSplit && !custom) ? &sTopRowOf[0] : &sTopRowOf[sNow];
-
-followRow = (sSplit && !custom)
-    ? sViews[sLastMovedPlayer].row
-    : row;
-
-if (followRow < *topRow) {
-    *topRow = followRow;
-}
-if (followRow >= *topRow + sVisibleRows) {
-    *topRow = followRow - sVisibleRows + 1;
-}
-if (*topRow > rows - sVisibleRows) {
-    *topRow = rows - sVisibleRows;
-}
-if (*topRow < 0) {
-    *topRow = 0;
-}
-    Port_GsMarker(GS_CHIP_ON);
-    Port_GsMarker(GS_CHIP_OFF);
-    Cs_Glass(CS_GRID_X - gapW * 2.0f, CS_GRID_Y - CS_GAP - 2.0f, panelR + gapW * 3.0f, CS_GRID_Y + (CS_CELL_H + CS_GAP) * sVisibleRows + CS_GAP + 1.0f, 7.0f,
-             CS_GLASS_TOP, CS_GLASS_LOW, CS_GLASS_LINE);
-    Port_GsMarker(GS_CHIP_ON);
-    for (r = 0; r < sVisibleRows; r++) {
-        for (c = 0; c < MCHR_COLS; c++) {
-            s32 at = c + (r + *topRow) * MCHR_COLS;
-            f32 x0 = CS_GRID_X + gapW + c * (cellW + gapW);
-            f32 y0 = CS_GRID_Y + r * (CS_CELL_H + CS_GAP);
-
-            if (at >= count || cells[at].id == MCHR_EMPTY) {
-                continue;
-            }
-            Cs_Chip(cells[at].id, x0, y0, x0 + cellW, y0 + CS_CELL_H, 0x80);
-        }
-    }
-    Port_GsMarker(GS_CHIP_OFF);
-    /* the cursor over the chips, and how far down the list is */
-    if (row >= *topRow && row < *topRow + sVisibleRows) {
-        f32 x0 = CS_GRID_X + gapW + col * (cellW + gapW);
-        f32 y0 = CS_GRID_Y + (row - *topRow) * (CS_CELL_H + CS_GAP);
-        s32 glow = 0x50 + ((sTick & 31) < 16 ? (sTick & 31) : 31 - (sTick & 31)) * 3;
 
 
 /* Draw the roster cells and the shared scroll area. */
