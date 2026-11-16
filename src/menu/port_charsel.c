@@ -624,7 +624,7 @@ if (*topRow < 0) {
     Port_GsMarker(GS_CHIP_ON);
     for (r = 0; r < sVisibleRows; r++) {
         for (c = 0; c < MCHR_COLS; c++) {
-            s32 at = c + (r + sTopRowOf[sNow]) * MCHR_COLS;
+            s32 at = c + (r + *topRow) * MCHR_COLS;
             f32 x0 = CS_GRID_X + gapW + c * (cellW + gapW);
             f32 y0 = CS_GRID_Y + r * (CS_CELL_H + CS_GAP);
 
@@ -636,7 +636,7 @@ if (*topRow < 0) {
     }
     Port_GsMarker(GS_CHIP_OFF);
     /* the cursor over the chips, and how far down the list is */
-    if (row >= sTopRowOf[sNow] && row < sTopRowOf[sNow] + sVisibleRows) {
+    if (row >= *topRow && row < *topRow + sVisibleRows) {
         f32 x0 = CS_GRID_X + gapW + col * (cellW + gapW);
         f32 y0 = CS_GRID_Y + (row - sTopRowOf[sNow]) * (CS_CELL_H + CS_GAP);
         s32 glow = 0x50 + ((sTick & 31) < 16 ? (sTick & 31) : 31 - (sTick & 31)) * 3;
