@@ -1345,19 +1345,19 @@ void PortCharSel_Draw(void) {
         Cs_GridTiles();
 
         /* Each player draws their own cursor and details. */
-        for (i = 0; i < 2; i++) {
-            sNow = i;
-            sV = sViews[i];
-            sRed = sV.side == 1;
+for (i = 0; i < 2; i++) {
+    sNow = i;
+    sV = sViews[i];
+    sRed = sV.side == 1;
 
-            Cs_GridCursor();
+    Cs_GridCursor();
 
-            if (i == 0) {
-    Cs_Details(8.0f, 178.0f, 270.0f, 0.0f);
-} else {
-    Cs_Details(334.0f, 504.0f, 270.0f, 0.0f);
-            }
+    if (i == 0) {
+        Cs_Details(8.0f, 178.0f, 270.0f, 0.0f);
     } else {
+        Cs_Details(334.0f, 504.0f, 270.0f, 0.0f);
+    }
+}
         sNow = 0;
         sV = sViews[0];
         sRed = sV.side == 1;
