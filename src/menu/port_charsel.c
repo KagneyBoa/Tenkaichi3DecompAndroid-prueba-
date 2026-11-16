@@ -617,7 +617,7 @@ static void Cs_Grid(void) {
     }
     Port_GsMarker(GS_CHIP_OFF);
     /* the cursor over the chips, and how far down the list is */
-    if (row >= sTopRowOf[sNow] && row < sTopRowOf[sNow] + CS_VIS_ROWS) {
+    if (row >= sTopRowOf[sNow] && row < sTopRowOf[sNow] + sVisibleRows) {
         f32 x0 = CS_GRID_X + gapW + col * (cellW + gapW);
         f32 y0 = CS_GRID_Y + (row - sTopRowOf[sNow]) * (CS_CELL_H + CS_GAP);
         s32 glow = 0x50 + ((sTick & 31) < 16 ? (sTick & 31) : 31 - (sTick & 31)) * 3;
@@ -627,14 +627,14 @@ static void Cs_Grid(void) {
         Cs_Frame(x0 - 1.0f, y0 - 1.0f, x0 + cellW + 1.0f, y0 + CS_CELL_H + 1.0f, 3.0f, pulse);
     }
     if (sSplit && sV.done) {
-        f32 tall = (CS_CELL_H + CS_GAP) * CS_VIS_ROWS;
+        f32 tall = (CS_CELL_H + CS_GAP) * sVisibleRows;
 
         Cs_Rect(CS_GRID_X - gapW, CS_GRID_Y - CS_GAP, panelR, CS_GRID_Y + tall + CS_GAP, Ps_Rgba(0x02, 0x08, 0x20, 0x58), Ps_Rgba(0x02, 0x08, 0x20, 0x58));
         Cs_Title((CS_GRID_X + panelR) * 0.5f, CS_GRID_Y + tall * 0.5f - 24.0f, (char *)Cs_Words(W_READY), 1.2f, panelR - CS_GRID_X, 1);
     }
-    if (rows > CS_VIS_ROWS) {
+    if (rows > sVisibleRows) {
         f32 top = CS_GRID_Y;
-        f32 tall = (CS_CELL_H + CS_GAP) * CS_VIS_ROWS;
+        f32 tall = (CS_CELL_H + CS_GAP) * sVisibleRows;
         f32 x = panelR + gapW;
         f32 w = Cs_UnitsAcross(4.0f);
 
