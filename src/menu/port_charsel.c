@@ -1294,16 +1294,16 @@ void PortCharSel_Draw(void) {
     Port_GsMarker(GS_WHOLE_ON);
     Cs_MeasureWindow();
     Cs_RoundInit();
-    /* (Always drawn, also on a blank run again: the game's own picture is off, and the list of the last such blank is
-       shown. Left out it was a black picture at every rollback. The renderer discards the others.) */
     Ps_PageSet();
+
     sides = sSplit ? 2 : 1;
-    /* each fighter in the middle of the room next to its roster */
+
     if (sSplit) {
         Cs_Place(0);
-        middle[0] = (CS_GRID_X + Cs_GridWidth() + 256.0f) * 0.5f;
-        Cs_Place(1);
-        middle[1] = (256.0f + CS_GRID_X) * 0.5f;
+
+        /* The fighters stay outside the shared central roster. */
+        middle[0] = 72.0f;
+        middle[1] = 440.0f;
     } else if (sNarrow) {
         Cs_Place(0);
         middle[0] = (CS_GRID_X + Cs_GridWidth() + 512.0f) * 0.5f;
@@ -1313,56 +1313,95 @@ void PortCharSel_Draw(void) {
         middle[0] = (CS_GRID_X + Cs_GridWidth() + 502.0f - Cs_UnitsAcross(205.0f)) * 0.5f;
         middle[1] = 0.0f;
     }
-    Cs_Backdrop(sSplit ? 256.0f : middle[0], sSplit ? 2 : sViews[0].side == 1 ? 1 : 0);
+
+    Cs_Backdrop(sSplit ? 256.0f : middle[0],
+                sSplit ? 2 : sViews[0].side == 1 ? 1 : 0);
+
     if (s3D) {
         for (i = 0; i < sides; i++) {
-            f32 turn = gPad[sSplit || Port_NetActive() || Port_NetSession() ? sViews[i].side : 0].gameRight[0];
+            f32 turn = gPad[sSplit || Port_NetActive() || Port_NetSession()
+                ? sViews[i].side : 0].gameRight[0];
 
             if (turn > 0.1f || turn < -0.1f) {
                 sYawOf[i] += turn * 0.06f;
-                /* (the game's rotation holds only from -pi to pi: past that its matrix is no rotation at all, and the
-                   fighter came out huge and bent) */
+
                 if (sYawOf[i] > 3.14159265f) {
                     sYawOf[i] -= 6.2831853f;
                 } else if (sYawOf[i] < -3.14159265f) {
                     sYawOf[i] += 6.2831853f;
                 }
             }
+
             sRed = sViews[i].side == 1;
             Cs_Pedestal(i);
             sRed = 0;
         }
+
         if (Port_NetListShown()) {
-            ChrView_PortFrame(middle, sYawOf, sShownChara, sShownCostume, sSplit);
+            ChrView_PortFrame(middle, sYawOf, sShownChara,
+                              sShownCostume, sSplit);
         }
     }
-    /* (nothing of the viewer's 3D yet, a fighter with no model of its own, a marker: the portrait stands in) */
+
+    /* Fallback portraits. */
     for (i = 0; i < sides; i++) {
         if (!s3D || !ChrView_PortVisible(i)) {
             sV = sViews[i];
-            Cs_Portrait(middle[i], sSplit ? 230.0f : 330.0f);
+            Cs_Portrait(middle[i], sSplit ? 190.0f : 330.0f);
         }
     }
-    if (!sSplit && !sNarrow) {
-        Cs_Title(CS_GRID_X, 18.0f, (char *)Cs_Words(W_CHOOSE), 0.95f, 0.0f, 0);
+
+    if (!sNarrow) {
+        Cs_Title(CS_GRID_X, 18.0f,
+                 (char *)Cs_Words(W_CHOOSE), 0.95f, 0.0f, 0);
     }
-    for (i = 0; i < sides; i++) {
-        sNow = i;
-        sV = sViews[i];
+
+    if (sSplit) {
+        /* Draw the shared roster exactly once. */
+        sNow = 0;
+        sV = sViews[0];
+        sRed = 0;
+        Cs_Place(0);
+        Cs_GridTiles();
+
+        /* Each player draws their own cursor and details. */
+        for (i = 0; i < 2; i++) {
+            sNow = i;
+            sV = sViews[i];
+            sRed = sV.side == 1;
+
+            Cs_GridCursor();
+
+            if (i == 0) {
+                Cs_Details(8.0f, 250.0f, 205.0f, 0.0f);
+            } else {
+                Cs_Details(262.0f, 504.0f, 205.0f, 0.0f);
+            }
+        }
+    } else {
+        sNow = 0;
+        sV = sViews[0];
         sRed = sV.side == 1;
-        Cs_Place(i);
+
+        Cs_Place(0);
         Cs_Grid();
-        if (sSplit || sNarrow) {
+
+        if (sNarrow) {
             f32 w = Cs_GridWidth();
 
-            Cs_Details(CS_GRID_X, CS_GRID_X + w, CS_GRID_Y + (CS_CELL_H + CS_GAP) * sVisibleRows + 4.0f, CS_GRID_Y);
+            Cs_Details(CS_GRID_X, CS_GRID_X + w,
+                       CS_GRID_Y + (CS_CELL_H + CS_GAP) * sVisibleRows + 4.0f,
+                       CS_GRID_Y);
         } else {
-            Cs_Details(502.0f - Cs_UnitsAcross(205.0f), 502.0f, 20.0f, 0.0f);
+            Cs_Details(502.0f - Cs_UnitsAcross(205.0f),
+                       502.0f, 20.0f, 0.0f);
         }
     }
+
     sRed = 0;
     sNow = 0;
     sV = sViews[0];
+
     if (sSplit) {
         Cs_Foot(256.0f - (Ps_X(82.0f) - Ps_X(0.0f)) - 6.0f);
     } else if (sNarrow) {
@@ -1371,6 +1410,7 @@ void PortCharSel_Draw(void) {
     } else {
         Cs_Foot(14.0f);
     }
+
     Font_FlushAll();
 }
 
