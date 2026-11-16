@@ -586,12 +586,6 @@ static s32 ChrView_PortLoad(s32 side, s32 chara, s32 costume) {
         BtlObjAnim_PlayModel(obj, gChrView->anim, 2);
         sPortStanding[side] = 1;
     }
-    } else if (BtlObjAnim_PortPlay(obj, sPortMotion[side][at], 0x180, 1)) {
-        sPortStanding[side] = 0;
-    } else {
-        BtlObjAnim_PlayModel(obj, gChrView->anim, 2);
-        sPortStanding[side] = 1;
-    }
     BTL_OBJ_FLAGS(obj) &= ~0x32000000; /* (no shadow pass for it, already while it is not on screen) */
     BtlObj_SetPartVisible(obj, 0, 0);
     sPortNew[side] = slot;
