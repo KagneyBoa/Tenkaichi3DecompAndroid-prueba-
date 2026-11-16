@@ -728,15 +728,19 @@ static void Cs_GridCursor(void) {
             ? (sTick & 31)
             : 31 - (sTick & 31)) * 3;
 
-        u32 pulse = Ps_Rgba(0xFF, 0xD8, 0x30, 0x80);
+        u32 pulse = sRed
+            ? Ps_Rgba(0xFF, 0x70, 0x70, 0x90)
+            : Ps_Rgba(0x70, 0xD8, 0xFF, 0x90);
 
         Cs_Rect(
             x0,
             y0,
             x0 + cellW,
             y0 + CS_CELL_H,
-            Ps_Rgba(0xFF, 0xE8, 0x80, glow / 4),
-            Ps_Rgba(0xFF, 0xE8, 0x80, 0)
+            sRed
+                ? Ps_Rgba(0xFF, 0x70, 0x70, glow / 4)
+                : Ps_Rgba(0x70, 0xD8, 0xFF, glow / 4),
+            Ps_Rgba(0xFF, 0xFF, 0xFF, 0)
         );
 
         Cs_Frame(
