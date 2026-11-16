@@ -600,10 +600,10 @@ static void Cs_Grid(void) {
     }
     Port_GsMarker(GS_CHIP_ON);
     Port_GsMarker(GS_CHIP_OFF);
-    Cs_Glass(CS_GRID_X - gapW * 2.0f, CS_GRID_Y - CS_GAP - 2.0f, panelR + gapW * 3.0f, CS_GRID_Y + (CS_CELL_H + CS_GAP) * CS_VIS_ROWS + CS_GAP + 1.0f, 7.0f,
+    Cs_Glass(CS_GRID_X - gapW * 2.0f, CS_GRID_Y - CS_GAP - 2.0f, panelR + gapW * 3.0f, CS_GRID_Y + (CS_CELL_H + CS_GAP) * sVisibleRows + CS_GAP + 1.0f, 7.0f,
              CS_GLASS_TOP, CS_GLASS_LOW, CS_GLASS_LINE);
     Port_GsMarker(GS_CHIP_ON);
-    for (r = 0; r < CS_VIS_ROWS; r++) {
+    for (r = 0; r < sVisibleRows; r++) {
         for (c = 0; c < MCHR_COLS; c++) {
             s32 at = c + (r + sTopRowOf[sNow]) * MCHR_COLS;
             f32 x0 = CS_GRID_X + gapW + c * (cellW + gapW);
