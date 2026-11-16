@@ -579,9 +579,13 @@ static s32 ChrView_PortLoad(s32 side, s32 chara, s32 costume) {
         return 0;
     }
     obj = BtlObj_Get(slot->obj);
-    /* (Taopaipai's entrance comes flying from far off, on his pillar: he goes straight to his hold) */
-    if (chara == CHRVIEW_CHARA_TAOPAIPAI && BtlObjAnim_PortPlay(obj, sPortMotion[side][at], 0x181, 2)) {
+        /* All fighters start directly in their looping hold animation. */
+    if (BtlObjAnim_PortPlay(obj, sPortMotion[side][at], 0x181, 2)) {
         sPortStanding[side] = 1;
+    } else {
+        BtlObjAnim_PlayModel(obj, gChrView->anim, 2);
+        sPortStanding[side] = 1;
+    }
     } else if (BtlObjAnim_PortPlay(obj, sPortMotion[side][at], 0x180, 1)) {
         sPortStanding[side] = 0;
     } else {
