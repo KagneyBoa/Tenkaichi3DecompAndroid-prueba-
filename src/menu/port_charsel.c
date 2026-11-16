@@ -1074,11 +1074,26 @@ void PortCharSel_Frame(const CsView *view, s32 split, s32 stagePhase) {
     s32 i;
 
     sSplit = split != 0;
-    sViews[0] = view[0];
-    if (sSplit) {
-        sViews[1] = view[1];
+sViews[0] = view[0];
+if (sSplit) {
+    sViews[1] = view[1];
+}
+
+/* Detect which player moved their cursor this frame. */
+for (i = 0; i < (sSplit ? 2 : 1); i++) {
+    s32 row = sViews[i].showCustom ? sViews[i].customRow : sViews[i].row;
+    s32 col = sViews[i].showCustom ? sViews[i].customCol : sViews[i].col;
+
+    if (sLastCursorRow[i] >= 0 &&
+        (row != sLastCursorRow[i] || col != sLastCursorCol[i])) {
+        sLastMovedPlayer = i;
     }
-    sV = sViews[0];
+
+    sLastCursorRow[i] = row;
+    sLastCursorCol[i] = col;
+}
+
+sV = sViews[0];
     sNow = 0;
     sTick++;
     sInScene = scene;
