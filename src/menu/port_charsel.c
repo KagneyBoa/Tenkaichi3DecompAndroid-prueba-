@@ -1353,11 +1353,10 @@ void PortCharSel_Draw(void) {
             Cs_GridCursor();
 
             if (i == 0) {
-    Cs_Details(8.0f, 178.0f, 225.0f, 0.0f);
+    Cs_Details(8.0f, 178.0f, 270.0f, 0.0f);
 } else {
-    Cs_Details(334.0f, 504.0f, 225.0f, 0.0f);
+    Cs_Details(334.0f, 504.0f, 270.0f, 0.0f);
             }
-        }
     } else {
         sNow = 0;
         sV = sViews[0];
