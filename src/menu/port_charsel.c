@@ -589,11 +589,11 @@ static void Cs_Grid(void) {
     if (row < sTopRowOf[sNow]) {
         sTopRowOf[sNow] = row;
     }
-    if (row >= sTopRowOf[sNow] + CS_VIS_ROWS) {
-        sTopRowOf[sNow] = row - CS_VIS_ROWS + 1;
+    if (row >= sTopRowOf[sNow] + sVisibleRows) {
+        sTopRowOf[sNow] = row - sVisibleRows + 1;
     }
-    if (sTopRowOf[sNow] > rows - CS_VIS_ROWS) {
-        sTopRowOf[sNow] = rows - CS_VIS_ROWS;
+    if (sTopRowOf[sNow] > rows - sVisibleRows) {
+        sTopRowOf[sNow] = rows - sVisibleRows;
     }
     if (sTopRowOf[sNow] < 0) {
         sTopRowOf[sNow] = 0;
