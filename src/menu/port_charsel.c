@@ -78,6 +78,12 @@ static PORT_HOST s32 sTick;
 static PORT_HOST s32 sSplit;    /* two people choosing: the screen in two halves */
 static PORT_HOST s32 sNow;      /* the half being drawn */
 static PORT_HOST s32 sTopRowOf[2];
+
+/* Shared roster: remember which player moved most recently. */
+static PORT_HOST s32 sLastMovedPlayer;
+static PORT_HOST s32 sLastCursorRow[2] = { -1, -1 };
+static PORT_HOST s32 sLastCursorCol[2] = { -1, -1 };
+
 static PORT_HOST s32 sWantChara[2], sWantCostume[2], sShownChara[2], sShownCostume[2];
 static PORT_HOST s32 sRest[2];
 static PORT_HOST CsView sViews[2];
