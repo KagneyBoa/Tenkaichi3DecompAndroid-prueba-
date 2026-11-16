@@ -641,29 +641,181 @@ if (*topRow < 0) {
         f32 y0 = CS_GRID_Y + (row - *topRow) * (CS_CELL_H + CS_GAP);
         s32 glow = 0x50 + ((sTick & 31) < 16 ? (sTick & 31) : 31 - (sTick & 31)) * 3;
 
-        pulse = Ps_Rgba(0xFF, 0xD8, 0x30, 0x80);
-        Cs_Rect(x0, y0, x0 + cellW, y0 + CS_CELL_H, Ps_Rgba(0xFF, 0xE8, 0x80, glow / 4), Ps_Rgba(0xFF, 0xE8, 0x80, 0));
-        Cs_Frame(x0 - 1.0f, y0 - 1.0f, x0 + cellW + 1.0f, y0 + CS_CELL_H + 1.0f, 3.0f, pulse);
+
+/* Draw the roster cells and the shared scroll area. */
+static void Cs_GridTiles(void) {
+    s32 custom = sV.showCustom;
+    CsCell *cells = custom ? sV.custom : sV.cells;
+    s32 count = custom ? sV.customCount : sV.cellCount;
+    s32 rows = (count + MCHR_COLS - 1) / MCHR_COLS;
+    f32 cellW = Cs_UnitsAcross(CS_CELL_H) * 48.0f / 41.0f;
+    f32 gapW = Cs_UnitsAcross(CS_GAP);
+    f32 panelR = CS_GRID_X + (cellW + gapW) * MCHR_COLS + gapW;
+    s32 r;
+    s32 c;
+    s32 *topRow;
+    s32 followRow;
+
+    /* Keep the existing scroll behavior. */
+    if (sV.row < sTopRowOf[sNow]) {
+        sTopRowOf[sNow] = sV.row;
     }
+
+    topRow = (sSplit && !custom) ? &sTopRowOf[0] : &sTopRowOf[sNow];
+
+    followRow = (sSplit && !custom)
+        ? sViews[sLastMovedPlayer].row
+        : sV.row;
+
+    if (followRow < *topRow) {
+        *topRow = followRow;
+    }
+    if (followRow >= *topRow + sVisibleRows) {
+        *topRow = followRow - sVisibleRows + 1;
+    }
+    if (*topRow > rows - sVisibleRows) {
+        *topRow = rows - sVisibleRows;
+    }
+    if (*topRow < 0) {
+        *topRow = 0;
+    }
+
+    Port_GsMarker(GS_CHIP_ON);
+    Port_GsMarker(GS_CHIP_OFF);
+
+    Cs_Glass(
+        CS_GRID_X - gapW * 2.0f,
+        CS_GRID_Y - CS_GAP - 2.0f,
+        panelR + gapW * 3.0f,
+        CS_GRID_Y + (CS_CELL_H + CS_GAP) * sVisibleRows + CS_GAP + 1.0f,
+        7.0f,
+        CS_GLASS_TOP,
+        CS_GLASS_LOW,
+        CS_GLASS_LINE
+    );
+
+    Port_GsMarker(GS_CHIP_ON);
+
+    for (r = 0; r < sVisibleRows; r++) {
+        for (c = 0; c < MCHR_COLS; c++) {
+            s32 at = c + (r + *topRow) * MCHR_COLS;
+            f32 x0 = CS_GRID_X + gapW + c * (cellW + gapW);
+            f32 y0 = CS_GRID_Y + r * (CS_CELL_H + CS_GAP);
+
+            if (at >= count || cells[at].id == MCHR_EMPTY) {
+                continue;
+            }
+
+            Cs_Chip(
+                cells[at].id,
+                x0,
+                y0,
+                x0 + cellW,
+                y0 + CS_CELL_H,
+                0x80
+            );
+        }
+    }
+
+    Port_GsMarker(GS_CHIP_OFF);
+
+    /* Ready overlay. */
     if (sSplit && sV.done) {
         f32 tall = (CS_CELL_H + CS_GAP) * sVisibleRows;
 
-        Cs_Rect(CS_GRID_X - gapW, CS_GRID_Y - CS_GAP, panelR, CS_GRID_Y + tall + CS_GAP, Ps_Rgba(0x02, 0x08, 0x20, 0x58), Ps_Rgba(0x02, 0x08, 0x20, 0x58));
-        Cs_Title((CS_GRID_X + panelR) * 0.5f, CS_GRID_Y + tall * 0.5f - 24.0f, (char *)Cs_Words(W_READY), 1.2f, panelR - CS_GRID_X, 1);
+        Cs_Rect(
+            CS_GRID_X - gapW,
+            CS_GRID_Y - CS_GAP,
+            panelR,
+            CS_GRID_Y + tall + CS_GAP,
+            Ps_Rgba(0x02, 0x08, 0x20, 0x58),
+            Ps_Rgba(0x02, 0x08, 0x20, 0x58)
+        );
+
+        Cs_Title(
+            (CS_GRID_X + panelR) * 0.5f,
+            CS_GRID_Y + tall * 0.5f - 24.0f,
+            (char *)Cs_Words(W_READY),
+            1.2f,
+            panelR - CS_GRID_X,
+            1
+        );
     }
+
+    /* Scrollbar. */
     if (rows > sVisibleRows) {
         f32 top = CS_GRID_Y;
         f32 tall = (CS_CELL_H + CS_GAP) * sVisibleRows;
         f32 x = panelR + gapW;
         f32 w = Cs_UnitsAcross(4.0f);
 
-        Cs_Rect(x, top, x + w, top + tall, Ps_Rgba(0, 0, 0, 0x30), Ps_Rgba(0, 0, 0, 0x30));
-        Cs_Rect(x, top + tall * *topRow / rows, x + w, top + tall * (*topRow + sVisibleRows) / rows,
-                Ps_Rgba(0xFF, 0xFF, 0xFF, 0x70), Ps_Rgba(0xFF, 0xFF, 0xFF, 0x70));
+        Cs_Rect(
+            x,
+            top,
+            x + w,
+            top + tall,
+            Ps_Rgba(0, 0, 0, 0x30),
+            Ps_Rgba(0, 0, 0, 0x30)
+        );
+
+        Cs_Rect(
+            x,
+            top + tall * *topRow / rows,
+            x + w,
+            top + tall * (*topRow + sVisibleRows) / rows,
+            Ps_Rgba(0xFF, 0xFF, 0xFF, 0x70),
+            Ps_Rgba(0xFF, 0xFF, 0xFF, 0x70)
+        );
     }
 }
 
-static f32 Cs_Heading(f32 x0, f32 x1, f32 y, s32 word) {
+/* Draw only the current player's cursor over the roster. */
+static void Cs_GridCursor(void) {
+    s32 custom = sV.showCustom;
+    s32 col = custom ? sV.customCol : sV.col;
+    s32 row = custom ? sV.customRow : sV.row;
+    s32 *topRow = (sSplit && !custom)
+        ? &sTopRowOf[0]
+        : &sTopRowOf[sNow];
+
+    f32 cellW = Cs_UnitsAcross(CS_CELL_H) * 48.0f / 41.0f;
+    f32 gapW = Cs_UnitsAcross(CS_GAP);
+
+    if (row >= *topRow && row < *topRow + sVisibleRows) {
+        f32 x0 = CS_GRID_X + gapW + col * (cellW + gapW);
+        f32 y0 = CS_GRID_Y + (row - *topRow) * (CS_CELL_H + CS_GAP);
+        s32 glow = 0x50 + ((sTick & 31) < 16
+            ? (sTick & 31)
+            : 31 - (sTick & 31)) * 3;
+
+        u32 pulse = Ps_Rgba(0xFF, 0xD8, 0x30, 0x80);
+
+        Cs_Rect(
+            x0,
+            y0,
+            x0 + cellW,
+            y0 + CS_CELL_H,
+            Ps_Rgba(0xFF, 0xE8, 0x80, glow / 4),
+            Ps_Rgba(0xFF, 0xE8, 0x80, 0)
+        );
+
+        Cs_Frame(
+            x0 - 1.0f,
+            y0 - 1.0f,
+            x0 + cellW + 1.0f,
+            y0 + CS_CELL_H + 1.0f,
+            3.0f,
+            pulse
+        );
+    }
+}
+
+/* Keep the original entry point while the shared-grid change is prepared. */
+static void Cs_Grid(void) {
+    Cs_GridTiles();
+    Cs_GridCursor();
+}
+
     Cs_Plate(x0, y, x1, y + 19.0f, sRed ? Ps_Rgba(0x70, 0x10, 0x14, 0x78) : Ps_Rgba(0x0C, 0x2C, 0x70, 0x78),
              sRed ? Ps_Rgba(0x4C, 0x08, 0x0C, 0x60) : Ps_Rgba(0x06, 0x1C, 0x4C, 0x60));
     Cs_Rect(x0, y, x0 + Cs_UnitsAcross(3.0f), y + 19.0f, Ps_Rgba(0xFF, 0xC8, 0x40, 0x80), Ps_Rgba(0xE0, 0x80, 0x10, 0x80));
