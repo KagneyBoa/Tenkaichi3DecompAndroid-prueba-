@@ -592,19 +592,31 @@ static void Cs_Grid(void) {
     u32 pulse;
     s32 r;
     s32 c;
+    s32 *topRow;
+    s32 followRow;
 
     if (row < sTopRowOf[sNow]) {
         sTopRowOf[sNow] = row;
     }
-    if (row >= sTopRowOf[sNow] + sVisibleRows) {
-        sTopRowOf[sNow] = row - sVisibleRows + 1;
-    }
-    if (sTopRowOf[sNow] > rows - sVisibleRows) {
-        sTopRowOf[sNow] = rows - sVisibleRows;
-    }
-    if (sTopRowOf[sNow] < 0) {
-        sTopRowOf[sNow] = 0;
-    }
+    /* Both players share the same scroll position in the normal roster. */
+topRow = (sSplit && !custom) ? &sTopRowOf[0] : &sTopRowOf[sNow];
+
+followRow = (sSplit && !custom)
+    ? sViews[sLastMovedPlayer].row
+    : row;
+
+if (followRow < *topRow) {
+    *topRow = followRow;
+}
+if (followRow >= *topRow + sVisibleRows) {
+    *topRow = followRow - sVisibleRows + 1;
+}
+if (*topRow > rows - sVisibleRows) {
+    *topRow = rows - sVisibleRows;
+}
+if (*topRow < 0) {
+    *topRow = 0;
+}
     Port_GsMarker(GS_CHIP_ON);
     Port_GsMarker(GS_CHIP_OFF);
     Cs_Glass(CS_GRID_X - gapW * 2.0f, CS_GRID_Y - CS_GAP - 2.0f, panelR + gapW * 3.0f, CS_GRID_Y + (CS_CELL_H + CS_GAP) * sVisibleRows + CS_GAP + 1.0f, 7.0f,
