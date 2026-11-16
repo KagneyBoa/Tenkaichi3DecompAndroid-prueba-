@@ -1263,27 +1263,7 @@ static void Cs_Place(s32 side) {
         CS_GRID_X = 10.0f;
     }
 }
-    if (sSplit || sNarrow) {
-        f32 room = sSplit ? 150.0f : 235.0f; /* across, in the window's units */
-        f32 tall = ((room / sAcrossPerDown - 2.0f) / (f32)MCHR_COLS - 2.0f) * 41.0f / 48.0f;
-
-        CS_CELL_H = tall < 31.0f ? tall : 31.0f;
-        if (!sSplit && !sV.isTeam && tall > 36.0f) {
-            CS_CELL_H = 36.0f; /* (alone and with no team to show, there is room under it for more) */
-        } else if (!sSplit && !sV.isTeam && tall > 31.0f) {
-            CS_CELL_H = tall;
-        }
-        CS_GAP = 2.0f;
-        CS_GRID_Y = 34.0f;
-        CS_GRID_X = sSplit && side != 0 ? 506.0f - Cs_GridWidth() : 6.0f;
-    } else {
-        CS_CELL_H = 47.0f;
-        CS_GAP = 3.0f;
-        CS_GRID_Y = 62.0f;
-        CS_GRID_X = 10.0f;
-    }
-}
-
+    
 /* In the screen's Draw's place. */
 void PortCharSel_Draw(void) {
     f32 middle[2];
