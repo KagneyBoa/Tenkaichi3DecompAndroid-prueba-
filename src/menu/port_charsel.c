@@ -1357,7 +1357,8 @@ for (i = 0; i < 2; i++) {
     } else {
         Cs_Details(334.0f, 504.0f, 270.0f, 0.0f);
     }
-}
+        }
+    } else {
         sNow = 0;
         sV = sViews[0];
         sRed = sV.side == 1;
