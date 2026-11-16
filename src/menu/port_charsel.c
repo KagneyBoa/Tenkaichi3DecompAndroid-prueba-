@@ -658,7 +658,7 @@ if (*topRow < 0) {
         f32 w = Cs_UnitsAcross(4.0f);
 
         Cs_Rect(x, top, x + w, top + tall, Ps_Rgba(0, 0, 0, 0x30), Ps_Rgba(0, 0, 0, 0x30));
-        Cs_Rect(x, top + tall * sTopRowOf[sNow] / rows, x + w, top + tall * (sTopRowOf[sNow] + sVisibleRows) / rows,
+        Cs_Rect(x, top + tall * *topRow / rows, x + w, top + tall * (*topRow + sVisibleRows) / rows,
                 Ps_Rgba(0xFF, 0xFF, 0xFF, 0x70), Ps_Rgba(0xFF, 0xFF, 0xFF, 0x70));
     }
 }
