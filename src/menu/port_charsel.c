@@ -639,7 +639,7 @@ static void Cs_Grid(void) {
         f32 w = Cs_UnitsAcross(4.0f);
 
         Cs_Rect(x, top, x + w, top + tall, Ps_Rgba(0, 0, 0, 0x30), Ps_Rgba(0, 0, 0, 0x30));
-        Cs_Rect(x, top + tall * sTopRowOf[sNow] / rows, x + w, top + tall * (sTopRowOf[sNow] + CS_VIS_ROWS) / rows,
+        Cs_Rect(x, top + tall * sTopRowOf[sNow] / rows, x + w, top + tall * (sTopRowOf[sNow] + sVisibleRows) / rows,
                 Ps_Rgba(0xFF, 0xFF, 0xFF, 0x70), Ps_Rgba(0xFF, 0xFF, 0xFF, 0x70));
     }
 }
@@ -1199,7 +1199,7 @@ void PortCharSel_Draw(void) {
         if (sSplit || sNarrow) {
             f32 w = Cs_GridWidth();
 
-            Cs_Details(CS_GRID_X, CS_GRID_X + w, CS_GRID_Y + (CS_CELL_H + CS_GAP) * CS_VIS_ROWS + 4.0f, CS_GRID_Y);
+            Cs_Details(CS_GRID_X, CS_GRID_X + w, CS_GRID_Y + (CS_CELL_H + CS_GAP) * sVisibleRows + 4.0f, CS_GRID_Y);
         } else {
             Cs_Details(502.0f - Cs_UnitsAcross(205.0f), 502.0f, 20.0f, 0.0f);
         }
