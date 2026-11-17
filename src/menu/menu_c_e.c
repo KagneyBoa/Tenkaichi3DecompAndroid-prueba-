@@ -2042,6 +2042,9 @@ s32 CharSel_Run(s32 section) {
     CharSel_Init(section);
 #ifdef PORT
     PortCharSel_Begin(!PortGame_IsBT4());
+    if (!PortGame_IsBT4()) {
+        PortStageSel_Begin();
+    }
 #endif
     ColorFade_StartIn(0, 0, 0, 0x14);
     while (1) {
