@@ -10,4 +10,9 @@ void PortStageSel_End(void);
 s32 PortStageSel_Enabled(void);
 void PortStageSel_SetEnabled(s32 enabled);
 void PortStageSel_Draw(void);
+
+/* Widescreen presentation while the alternative stage menu is active. */
+void PortStageSel_SetAspectActive(s32 active);
+s32 PortStageSel_AspectActive(void);
+
 #endif
