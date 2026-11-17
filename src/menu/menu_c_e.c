@@ -1287,6 +1287,14 @@ void CharSel_Draw(void) {
     }
     Font_FlushAll();
     IconWin_Draw();
+   #ifdef PORT
+    if ((gCharSel->flags & CHARSEL_STAGE_PHASE) &&
+        !PortGame_IsBT4() &&
+        PortStageSel_Enabled()) {
+        PortStageSel_Draw();
+        return;
+    }
+#endif
 #ifdef PORT
     if (PortCharSel_Shown(CHARSEL_PORT_STAGE())) {
         Font_FlushAll();
