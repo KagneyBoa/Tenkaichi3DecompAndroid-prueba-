@@ -6,7 +6,7 @@
 #include "common.h"
 #ifdef PORT
 #include "menu/tag_outfit.h"
-#include "menu/port_stagesel.h"
+#include "port_stagesel.h"
 #endif
 #include "menu/menu_d.h"
 #include "sys/common.h"
