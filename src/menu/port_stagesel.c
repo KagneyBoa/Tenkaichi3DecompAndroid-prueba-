@@ -1,22 +1,20 @@
 
+
 #include "port_stagesel.h"
 
-#include <stdlib.h>
+/* Settings functions provided by port/src/plat_settings.c. */
+extern int Port_Setting(const char *name, int def);
+extern void Port_SettingSave(const char *name, int value);
 
 static s32 sEnabled;
-static s32 sActive;
 
 /* Read the selected menu when the stage selector begins. */
 void PortStageSel_Begin(void) {
-    const char *env = getenv("BT3_STAGESEL_CLASSIC");
-
-    sEnabled = !(env != NULL ? atoi(env) : Port_Setting("stage_menu_classic", 0));
-    sActive = 0;
+    sEnabled = !Port_Setting("stage_menu_classic", 0);
 }
 
 /* End the alternative menu session. */
 void PortStageSel_End(void) {
-    sActive = 0;
 }
 
 /* Is the alternative menu selected? */
