@@ -909,8 +909,14 @@ void CharSel_Draw(void) {
     MFlash *f;
 
 #ifdef PORT
+    PortStageSel_SetAspectActive(
+        (gCharSel->flags & CHARSEL_STAGE_PHASE) &&
+        !PortGame_IsBT4() &&
+        PortStageSel_Enabled()
+    );
+
     if (PortCharSel_Shown(CHARSEL_PORT_STAGE())) {
-        PortCharSel_MuteOn(); /* all of this still runs (the movies' state is the game's); none of it is shown */
+        PortCharSel_MuteOn();
     }
     gUiNameIdx = -1; /* set again below only for a stage added from outside the disc */
     gUiSongIdx = -1; /* and only for a song added from outside the disc (set in the music-name block) */
