@@ -664,6 +664,12 @@ int Port_Menus43(void) {
 void Port_Menus43Set(int on) {
     sMenus43 = on != 0;
 }
+extern int PortStageSel_AspectActive(void);
+
 int Port_PageAspectMilli(void) {
+    if (PortStageSel_AspectActive()) {
+        return Port_AspectMilli();
+    }
+
     return gPortMenuMode && Port_Menus43() ? 1333 : Port_AspectMilli();
 }
