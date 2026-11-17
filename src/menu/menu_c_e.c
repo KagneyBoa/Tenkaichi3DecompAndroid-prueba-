@@ -2093,6 +2093,7 @@ s32 CharSel_Run(s32 section) {
     }
 #ifdef PORT
     PortCharSel_End();
+    PortStageSel_End();
 #endif
     if (result != 0) {
         s32 flag[2] = { 1, 1 };
