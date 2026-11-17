@@ -196,7 +196,7 @@ static void Cs_MeasureWindow(void) {
 
     sAcrossPerDown = (512.0f / 448.0f) * 1000.0f / (f32)aspect;
     sNarrow = aspect < 1900;
-    sVisibleRows = 6;
+    sVisibleRows = sSplit ? 14 : 6;
 }
 
 static f32 Cs_UnitsAcross(f32 unitsDown) { /* so many units across are as long as this many down */
