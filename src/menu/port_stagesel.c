@@ -2,6 +2,7 @@
 #include "port_stagesel.h"
 #include "menu/menu_d.h"
 #include "menu/port_screen.h"
+#include "sys/sprite.h"
 
 /* Settings functions provided by port/src/plat_settings.c. */
 extern int Port_Setting(const char *name, int def);
@@ -34,7 +35,84 @@ static void StageSel_Frame(f32 x0, f32 y0, f32 x1, f32 y1, u32 color) {
     StageSel_Rect(x0, y0, x0 + 1.0f, y1, color);
     StageSel_Rect(x1 - 1.0f, y0, x1, y1, color);
 }
+/* Draw one stage thumbnail, preserving its original texture proportions. */
+static void StageSel_DrawThumbnail(s32 id, f32 x, f32 y, f32 w, f32 h) {
+    s32 icon;
+    s32 texW;
+    s32 texH;
+    s32 drawW;
+    s32 drawH;
+    s32 drawX;
+    s32 drawY;
+    u64 tex0;
+    MTexRes *res;
+    LoadSprite sprites[2];
 
+    if (id == 0x3E) {
+        icon = 37;
+    } else if (id == 0x3F) {
+        icon = 38;
+    } else if (id >= 0x24) {
+        icon = 1 + (id - 0x24) % 36;
+    } else {
+        icon = id + 1;
+    }
+
+    res = (MTexRes *)MPACK_AT(gCharSel->stagePack, icon);
+
+    tex0 = ((SpriteTex *)res->tex)->tex0;
+
+    texW = 1 << ((tex0 >> 26) & 0xF);
+    texH = 1 << ((tex0 >> 30) & 0xF);
+
+    drawH = (s32)h;
+    drawW = drawH * texW / texH;
+
+    if (drawW > (s32)w) {
+        drawW = (s32)w;
+        drawH = drawW * texH / texW;
+    }
+
+    drawX = (s32)(x + (w - drawW) * 0.5f);
+    drawY = (s32)(y + (h - drawH) * 0.5f);
+
+    sprites[0].flags = LOAD_SPR_DRAW;
+    sprites[0].x0 = 0;
+    sprites[0].y0 = 0;
+    sprites[0].x1 = drawW;
+    sprites[0].y1 = drawH;
+    sprites[0].u0 = 0;
+    sprites[0].v0 = 0;
+    sprites[0].u1 = texW;
+    sprites[0].v1 = texH;
+    sprites[0].tex = 0;
+    sprites[0].r = 255;
+    sprites[0].g = 255;
+    sprites[0].b = 255;
+    sprites[0].a = 255;
+
+    sprites[1].flags = LOAD_SPR_END;
+    sprites[1].x0 = 0;
+    sprites[1].y0 = 0;
+    sprites[1].x1 = 0;
+    sprites[1].y1 = 0;
+    sprites[1].u0 = 0;
+    sprites[1].v0 = 0;
+    sprites[1].u1 = 0;
+    sprites[1].v1 = 0;
+    sprites[1].tex = 0;
+    sprites[1].r = 0;
+    sprites[1].g = 0;
+    sprites[1].b = 0;
+    sprites[1].a = 0;
+
+    Sprite_DrawList(
+        (SpriteRes *)res,
+        (s32)StageSel_X(drawX),
+        drawY,
+        sprites
+    );
+}
 /* Read the selected menu when the stage selector begins. */
 void PortStageSel_Begin(void) {
     sEnabled = !Port_Setting("stage_menu_classic", 0);
@@ -143,33 +221,45 @@ void PortStageSel_Draw(void) {
     /* Six columns and six rows, with responsive cell widths. */
     for (row = 0; row < 6; row++) {
         for (col = 0; col < 6; col++) {
-            f32 x = margin + (f32)col * (cellW + gap);
-            f32 y = 300.0f + (f32)row * 22.0f;
-            s32 index = col + row * 6;
+    /* Six columns and six rows, with stage thumbnails. */
+for (row = 0; row < 6; row++) {
+    for (col = 0; col < 6; col++) {
+        f32 x = margin + (f32)col * (cellW + gap);
+        f32 y = 300.0f + (f32)row * 22.0f;
+        s32 index = col + row * 6;
+        s32 id = gCharSel->stageIds[index];
 
-            if (index == selected) {
-                StageSel_Rect(
-                    x, y, x + cellW, y + 18.0f,
-                    Ps_Rgba(35, 112, 205, 220)
-                );
+        if (index == selected) {
+            StageSel_Rect(
+                x, y, x + cellW, y + 18.0f,
+                Ps_Rgba(35, 112, 205, 220)
+            );
 
-                StageSel_Frame(
-                    x, y, x + cellW, y + 18.0f,
-                    Ps_Rgba(130, 205, 255, 230)
-                );
-            } else {
-                StageSel_Rect(
-                    x, y, x + cellW, y + 18.0f,
-                    Ps_Rgba(13, 42, 79, 210)
-                );
+            StageSel_Frame(
+                x, y, x + cellW, y + 18.0f,
+                Ps_Rgba(130, 205, 255, 230)
+            );
+        } else {
+            StageSel_Rect(
+                x, y, x + cellW, y + 18.0f,
+                Ps_Rgba(13, 42, 79, 210)
+            );
 
-                StageSel_Frame(
-                    x, y, x + cellW, y + 18.0f,
-                    Ps_Rgba(63, 117, 174, 150)
-                );
-            }
+            StageSel_Frame(
+                x, y, x + cellW, y + 18.0f,
+                Ps_Rgba(63, 117, 174, 150)
+            );
         }
+
+        StageSel_DrawThumbnail(
+            id,
+            x + 1.0f,
+            y + 1.0f,
+            cellW - 2.0f,
+            16.0f
+        );
     }
+}
 
     Port_GsMarker(0x25);
 }
