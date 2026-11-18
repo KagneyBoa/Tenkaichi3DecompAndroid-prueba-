@@ -79,7 +79,7 @@ static void StageSel_DrawThumbnail(s32 id, f32 x, f32 y, f32 w, f32 h) {
     sprites[0].flags = LOAD_SPR_DRAW;
     sprites[0].x0 = 0;
     sprites[0].y0 = 0;
-    sprites[0].x1 = drawW;
+    sprites[0].x1 = (s32)StageSel_X(drawW);
     sprites[0].y1 = drawH;
     sprites[0].u0 = 0;
     sprites[0].v0 = 0;
