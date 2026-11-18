@@ -1243,15 +1243,11 @@ if (shown && ref.id >= 0) {
                         gUiSongW = 0x200;
                         gUiSongH = 0x20;
                         gUiSongLit = !have;
-                        gUiSongIdx = bgm == CHARSEL_BGM_RANDOM
-    ? -26
-    : -(bgm + 2);
+                        gUiSongIdx = -(bgm + 2);
                     } else {
                         const char *const *songNames = MenuTranslation_SongNames();
-const char *songName = bgm == CHARSEL_BGM_RANDOM
-    ? "Random"
-    : (songNames != NULL && bgm < 24
-        ? songNames[bgm] : NULL);
+const char *songName = songNames != NULL
+    ? songNames[bgm] : NULL;
 
                         if (songName != NULL) {
                             FontStyle saved = gFontStyle;
