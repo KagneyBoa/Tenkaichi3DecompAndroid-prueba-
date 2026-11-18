@@ -7,6 +7,7 @@
 #ifdef PORT
 #include "menu/tag_outfit.h"
 #include "port_stagesel.h"
+#include "../../port/src/gs/menu_translation.h"
 #endif
 #include "menu/menu_d.h"
 #include "sys/common.h"
