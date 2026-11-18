@@ -2,7 +2,9 @@
 #include "port_stagesel.h"
 #include "menu/menu_d.h"
 #include "menu/port_screen.h"
+#define SYS_LOADING_NO_PROGRESS_EXTERN
 #include "sys/sprite.h"
+#undef SYS_LOADING_NO_PROGRESS_EXTERN
 
 /* Settings functions provided by port/src/plat_settings.c. */
 extern int Port_Setting(const char *name, int def);
