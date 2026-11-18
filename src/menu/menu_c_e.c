@@ -982,80 +982,6 @@ void CharSel_Draw(void) {
     uv.unk10 = gCharSel->stage->stage / 4;
 #endif
     Flash_FindLabel(f, NULL, "mc_map_name", &ref);
-#ifdef PORT
-    {
-    {
-    extern void Flash_ClipGetPos(MFlash *flash, MFlashRef *ref, s32 *x, s32 *y);
-    extern void Font_PrintAsciiAt(s32 x, s32 y, char *str);
-    extern s32 Font_GetGlyphHeight(void);
-    extern FontStyle gFontStyle;
-
-    s32 nameId = gCharSel->stage->stage;
-    s32 nx = 0, ny = 0;
-
-    if (!PortGame_IsBT4() && nameId >= 0x24) {
-        s32 idx = nameId - 0x24;
-
-        Flash_ClipSetFlags(f, &ref, 2, 0);
-        sPortStageNameHidden = 1;
-        Flash_ClipGetPos(f, &ref, &nx, &ny);
-
-        if (ref.id >= 0 && idx >= 0 && idx < gPortExtraStageCount) {
-            if (gUiNameReady) {
-                gUiNameX = nx + 64;
-                gUiNameY = ny + 14;
-                gUiNameW = 0x180;
-                gUiNameH = 0x30;
-                gUiNameIdx = idx;
-            } else {
-                FontStyle saved = gFontStyle;
-                gFontStyle.align = FONT_ALIGN_CENTER;
-                gFontStyle.color = 0xFFFFFFFF;
-                gFontStyle.shadowMode = FONT_SHADOW_DROP;
-                gFontStyle.shadowColor = 0xC0000000;
-                gFontStyle.shadowDx = 1;
-                gFontStyle.shadowDy = 1;
-                Font_PrintAsciiAt(
-                    nx + 0x100,
-                    ny + (0x40 - Font_GetGlyphHeight()) / 2,
-                    gPortStageNames[idx]
-                );
-                gFontStyle = saved;
-            }
-        }
-    } else {
-        uv.y0 = (nameId % 4) * 0x40;
-        uv.y1 = uv.y0 + 0x40;
-        uv.unk10 = nameId / 4;
-        Flash_ClipSetUv(f, &ref, &uv);
-        Flash_ClipSetTex(f, &ref, uv.unk10);
-
-        if (!PortGame_IsBT4() &&
-            PortStageSel_Enabled() &&
-            nameId >= 0 && nameId < 36 &&
-            ref.id >= 0 && gUiNameReady) {
-
-            s32 nx = 0, ny = 0;
-            Flash_ClipGetPos(f, &ref, &nx, &ny);
-            Flash_ClipSetFlags(f, &ref, 2, 0);
-            sPortStageNameHidden = 1;
-
-            gUiNameX = nx + 64;
-            gUiNameY = ny + 14;
-            gUiNameW = 0x180;
-            gUiNameH = 0x30;
-            gUiNameIdx = -(nameId + 2);
-        } else if (sPortStageNameHidden) {
-            Flash_ClipSetFlags(f, &ref, 2, 1);
-            sPortStageNameHidden = 0;
-        }
-    }
-    }
-                } else {
-                    /* No overlay: print the name with the game's own font (its plain UI face), centred on the
-                       strip, in an opaque white with a drop shadow (the style is copied into the command). */
-                    FontStyle saved = gFontStyle;
-                    gFontStyle.align = FONT_ALIGN_CENTER;
 
 #ifdef PORT
     {
@@ -1065,7 +991,8 @@ void CharSel_Draw(void) {
         extern FontStyle gFontStyle;
 
         s32 nameId = gCharSel->stage->stage;
-        s32 nx = 0, ny = 0;
+        s32 nx = 0;
+        s32 ny = 0;
 
         if (!PortGame_IsBT4() && nameId >= 0x24) {
             s32 idx = nameId - 0x24;
@@ -1075,7 +1002,8 @@ void CharSel_Draw(void) {
                 sPortStageNameHidden = 1;
                 Flash_ClipGetPos(f, &ref, &nx, &ny);
 
-                if (idx >= 0 && idx < gPortExtraStageCount) {
+                if (idx >= 0 && idx < gPortExtraStageCount &&
+                    gPortStageNames[idx] != NULL) {
                     if (gUiNameReady) {
                         gUiNameX = nx + 64;
                         gUiNameY = ny + 14;
@@ -1090,11 +1018,13 @@ void CharSel_Draw(void) {
                         gFontStyle.shadowColor = 0xC0000000;
                         gFontStyle.shadowDx = 1;
                         gFontStyle.shadowDy = 1;
+
                         Font_PrintAsciiAt(
                             nx + 0x100,
                             ny + (0x40 - Font_GetGlyphHeight()) / 2,
                             gPortStageNames[idx]
                         );
+
                         gFontStyle = saved;
                     }
                 }
@@ -1103,6 +1033,7 @@ void CharSel_Draw(void) {
             uv.y0 = (nameId % 4) * 0x40;
             uv.y1 = uv.y0 + 0x40;
             uv.unk10 = nameId / 4;
+
             Flash_ClipSetUv(f, &ref, &uv);
             Flash_ClipSetTex(f, &ref, uv.unk10);
 
@@ -1110,6 +1041,8 @@ void CharSel_Draw(void) {
                 PortStageSel_Enabled() &&
                 nameId >= 0 && nameId < 36 &&
                 ref.id >= 0) {
+
+                const char *const *stageNames = MenuTranslation_StageNames();
 
                 Flash_ClipGetPos(f, &ref, &nx, &ny);
                 Flash_ClipSetFlags(f, &ref, 2, 0);
@@ -1121,7 +1054,7 @@ void CharSel_Draw(void) {
                     gUiNameW = 0x180;
                     gUiNameH = 0x30;
                     gUiNameIdx = -(nameId + 2);
-                } else {
+                } else if (stageNames != NULL && stageNames[nameId] != NULL) {
                     FontStyle saved = gFontStyle;
                     gFontStyle.align = FONT_ALIGN_CENTER;
                     gFontStyle.color = 0xFFFFFFFF;
@@ -1129,14 +1062,16 @@ void CharSel_Draw(void) {
                     gFontStyle.shadowColor = 0xC0000000;
                     gFontStyle.shadowDx = 1;
                     gFontStyle.shadowDy = 1;
+
                     Font_PrintAsciiAt(
                         nx + 0x100,
                         ny + (0x40 - Font_GetGlyphHeight()) / 2,
-                        MenuTranslation_StageNames()[nameId]
+                        (char *)stageNames[nameId]
                     );
+
                     gFontStyle = saved;
                 }
-            } else if (sPortStageNameHidden) {
+            } else if (sPortStageNameHidden && ref.id >= 0) {
                 Flash_ClipSetFlags(f, &ref, 2, 1);
                 sPortStageNameHidden = 0;
             }
@@ -1146,6 +1081,7 @@ void CharSel_Draw(void) {
     Flash_ClipSetUv(f, &ref, &uv);
     Flash_ClipSetTex(f, &ref, uv.unk10);
 #endif
+
 
     Flash_FindLabel(f, NULL, "mc_map_mask", &ref);
     if (gCharSel->stage->mask != 0) {
