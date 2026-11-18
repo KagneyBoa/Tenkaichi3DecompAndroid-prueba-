@@ -3312,6 +3312,7 @@ const char *const *songNames = MenuTranslation_SongNames();
 
 int originalStage = gUiNameIdx <= -2 ? -gUiNameIdx - 2 : -1;
 int originalSong = gUiSongIdx <= -2 ? -gUiSongIdx - 2 : -1;
+   bool randomSong = gUiSongIdx == -26;
 
 bool nameOn = gUiNameReady != 0 &&
     ((gUiNameIdx >= 0 && gUiNameIdx < PortStages_Count()) ||
@@ -3319,7 +3320,8 @@ bool nameOn = gUiNameReady != 0 &&
       stageNames != NULL && stageNames[originalStage] != NULL));
 
 bool songOn = gUiSongReady != 0 &&
-    ((gUiSongIdx >= 0 && gUiSongIdx < PortSongs_Count()) ||
+    (randomSong ||
+     (gUiSongIdx >= 0 && gUiSongIdx < PortSongs_Count()) ||
      (originalSong >= 0 && originalSong < 24 &&
       songNames != NULL && songNames[originalSong] != NULL));
 
@@ -3513,9 +3515,11 @@ bool overlay = nameOn || songOn;
         }
 
         if (songOn) {
-            const char *songName = gUiSongIdx >= 0
-                ? PortSongs_Name(gUiSongIdx)
-                : songNames[originalSong];
+            const char *songName = randomSong
+    ? "Random"
+    : (gUiSongIdx >= 0
+        ? PortSongs_Name(gUiSongIdx)
+        : songNames[originalSong]);
 
             const FontName *fn = font_name(
                 gUiSongLit ? NF_SONG_LIT : NF_SONG, songName);
