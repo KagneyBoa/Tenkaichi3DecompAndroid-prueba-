@@ -3,7 +3,9 @@
 #include "menu/menu_d.h"
 #include "menu/port_screen.h"
 #define SYS_LOADING_NO_PROGRESS_EXTERN
+#define SYS_SPRITE_NO_DRAWPICTURE_EXTERN
 #include "sys/sprite.h"
+#undef SYS_SPRITE_NO_DRAWPICTURE_EXTERN
 #undef SYS_LOADING_NO_PROGRESS_EXTERN
 
 /* Settings functions provided by port/src/plat_settings.c. */
