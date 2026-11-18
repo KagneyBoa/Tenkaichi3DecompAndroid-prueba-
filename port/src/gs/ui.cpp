@@ -3531,8 +3531,9 @@ bool overlay = nameOn || songOn;
                 name_text(dl, songName, x, y,
                           (float)gUiSongW * sx,
                           (float)gUiSongH * sy, false);
-            }
+                        }
         }
+    }
     ImGui::Render();
     return true;
 }
