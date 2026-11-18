@@ -40,7 +40,9 @@ typedef struct SpriteRes {
 
 void *Sprite_Unpack(void *src, void *dst, s32 *rawSize);
 s32 Sprite_ConvY(s32 y);
+#ifndef SYS_SPRITE_NO_DRAWPICTURE_EXTERN
 void Sprite_DrawPicture(SpriteRes *res, s32 x, s32 y, s32 alpha);
+#endif
 void Sprite_DrawList(SpriteRes *res, s32 x, s32 y, LoadSprite *list);
 s32 Sprite_Stub126B08(void);
 void Sprite_SetScissor(s32 x0, s32 x1, s32 y0, s32 y1);
