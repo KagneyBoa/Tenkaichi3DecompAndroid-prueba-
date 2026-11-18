@@ -983,33 +983,73 @@ void CharSel_Draw(void) {
     Flash_FindLabel(f, NULL, "mc_map_name", &ref);
 #ifdef PORT
     {
-        /* PC build: the movie's name atlas only holds the stages of the disc (0..0x23). A stage added from
-           outside the disc has no name there, so the atlas clip is hidden and the name is printed with the
-           game's own font at the clip's place (the font queue is flushed at the end of this draw). */
-        extern void Flash_ClipGetPos(MFlash *flash, MFlashRef *ref, s32 *x, s32 *y);
-        extern void Font_PrintAsciiAt(s32 x, s32 y, char *str);
-        extern s32 Font_GetGlyphHeight(void);
-        extern FontStyle gFontStyle;
-        s32 nameId = gCharSel->stage->stage;
+    {
+    extern void Flash_ClipGetPos(MFlash *flash, MFlashRef *ref, s32 *x, s32 *y);
+    extern void Font_PrintAsciiAt(s32 x, s32 y, char *str);
+    extern s32 Font_GetGlyphHeight(void);
+    extern FontStyle gFontStyle;
 
-        if (nameId >= 0x24 && !PortGame_IsBT4()) {
-            s32 nx = 0, ny = 0; /* (an empty clip reference leaves them untouched) */
-            s32 idx = nameId - 0x24;
-            Flash_ClipSetFlags(f, &ref, 2, 0); /* FLASH_PROP_VISIBLE: hide the atlas name */
-            sPortStageNameHidden = 1;
+    s32 nameId = gCharSel->stage->stage;
+    s32 nx = 0, ny = 0;
+
+    if (!PortGame_IsBT4() && nameId >= 0x24) {
+        s32 idx = nameId - 0x24;
+
+        Flash_ClipSetFlags(f, &ref, 2, 0);
+        sPortStageNameHidden = 1;
+        Flash_ClipGetPos(f, &ref, &nx, &ny);
+
+        if (ref.id >= 0 && idx >= 0 && idx < gPortExtraStageCount) {
+            if (gUiNameReady) {
+                gUiNameX = nx + 64;
+                gUiNameY = ny + 14;
+                gUiNameW = 0x180;
+                gUiNameH = 0x30;
+                gUiNameIdx = idx;
+            } else {
+                FontStyle saved = gFontStyle;
+                gFontStyle.align = FONT_ALIGN_CENTER;
+                gFontStyle.color = 0xFFFFFFFF;
+                gFontStyle.shadowMode = FONT_SHADOW_DROP;
+                gFontStyle.shadowColor = 0xC0000000;
+                gFontStyle.shadowDx = 1;
+                gFontStyle.shadowDy = 1;
+                Font_PrintAsciiAt(
+                    nx + 0x100,
+                    ny + (0x40 - Font_GetGlyphHeight()) / 2,
+                    gPortStageNames[idx]
+                );
+                gFontStyle = saved;
+            }
+        }
+    } else {
+        uv.y0 = (nameId % 4) * 0x40;
+        uv.y1 = uv.y0 + 0x40;
+        uv.unk10 = nameId / 4;
+        Flash_ClipSetUv(f, &ref, &uv);
+        Flash_ClipSetTex(f, &ref, uv.unk10);
+
+        if (!PortGame_IsBT4() &&
+            PortStageSel_Enabled() &&
+            nameId >= 0 && nameId < 36 &&
+            ref.id >= 0 && gUiNameReady) {
+
+            s32 nx = 0, ny = 0;
             Flash_ClipGetPos(f, &ref, &nx, &ny);
-            /* Only where the name clip exists: the stage select. This draw also runs on the character select
-               (the last stage stays chosen after a fight), where the movie has no such clip; the name was then
-               drawn at the top of the screen, at the place an empty reference leaves (seen by the user). */
-            if (ref.id >= 0 && idx >= 0 && idx < gPortExtraStageCount) {
-                if (gUiNameReady) {
-                    /* The port draws the name (its own art: the menu's stylized font) over the picture. The
-                       rectangle is the clip's, in the game's 512x448 pixels; the strip image is idx. */
-                    gUiNameX = nx + 64;   /* centre the 384-wide strip in the 512-wide clip window */
-                    gUiNameY = ny + 14;
-                    gUiNameW = 0x180;
-                    gUiNameH = 0x30;
-                    gUiNameIdx = idx;
+            Flash_ClipSetFlags(f, &ref, 2, 0);
+            sPortStageNameHidden = 1;
+
+            gUiNameX = nx + 64;
+            gUiNameY = ny + 14;
+            gUiNameW = 0x180;
+            gUiNameH = 0x30;
+            gUiNameIdx = -(nameId + 2);
+        } else if (sPortStageNameHidden) {
+            Flash_ClipSetFlags(f, &ref, 2, 1);
+            sPortStageNameHidden = 0;
+        }
+    }
+    }
                 } else {
                     /* No overlay: print the name with the game's own font (its plain UI face), centred on the
                        strip, in an opaque white with a drop shadow (the style is copied into the command). */
@@ -1126,31 +1166,132 @@ void CharSel_Draw(void) {
                 gFontStyle.color = 0xFFFFFFFF;
                 gFontStyle.shadowMode = FONT_SHADOW_DROP;
                 gFontStyle.shadowColor = 0xC0000000;
-                Font_PrintAsciiAt(px + cx, py + cy + (0x20 - Font_GetGlyphHeight()) / 2, gPortSongNames[idx]);
-                gFontStyle = saved;
+{
+    extern void Flash_ClipGetPos(MFlash *flash, MFlashRef *ref, s32 *x, s32 *y);
+
+    s32 bgm = gCharSel->bgmIds[gCharSel->stage->bgm];
+
+    if (bgm >= PORT_SONG_FIRST_OFFSET && !PortGame_IsBT4()) {
+        s32 idx = bgm - PORT_SONG_FIRST_OFFSET;
+        s32 cx = 0, cy = 0, px = 0, py = 0;
+        s32 have = 0;
+        s32 shown = 0;
+
+        Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_off", &ref);
+        if (ref.id >= 0) {
+            Flash_ClipGetPos(f, &ref, &cx, &cy);
+            have = 1;
+        }
+        Flash_ClipSetFlags(f, &ref, 2, 0);
+
+        Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_on", &ref);
+        if (!have && ref.id >= 0) {
+            Flash_ClipGetPos(f, &ref, &cx, &cy);
+            shown = 1;
+        }
+        shown |= have;
+        Flash_ClipSetFlags(f, &ref, 2, 0);
+
+        sPortSongNameHidden = 1;
+
+        Flash_FindLabel(f, NULL, "mc_bgm_now", &ref);
+        Flash_ClipGetPos(f, &ref, &px, &py);
+
+        if (shown && gUiSongReady) {
+            gUiSongX = px + cx;
+            gUiSongY = py + cy;
+            gUiSongW = 0x200;
+            gUiSongH = 0x20;
+            gUiSongLit = !have;
+            gUiSongIdx = idx;
+
+            {
+                extern void Port_SongDebug(int state, int idx, int px, int py, int cx, int cy);
+                Port_SongDebug((int)gCharSel->stage->state,
+                               (int)idx, (int)px, (int)py, (int)cx, (int)cy);
             }
-        } else {
-            uv.y0 = (bgm % 8) * 0x20;
-            uv.y1 = uv.y0 + 0x20;
-            uv.unk10 = bgm / 8;
+        } else if (shown && idx >= 0 && idx < gPortSongCount) {
+            extern void Font_PrintAsciiAt(s32 x, s32 y, char *str);
+            extern s32 Font_GetGlyphHeight(void);
+            extern FontStyle gFontStyle;
+
+            FontStyle saved = gFontStyle;
+            gFontStyle.align = FONT_ALIGN_LEFT;
+            gFontStyle.color = 0xFFFFFFFF;
+            gFontStyle.shadowMode = FONT_SHADOW_DROP;
+            gFontStyle.shadowColor = 0xC0000000;
+
+            Font_PrintAsciiAt(
+                px + cx,
+                py + cy + (0x20 - Font_GetGlyphHeight()) / 2,
+                gPortSongNames[idx]
+            );
+
+            gFontStyle = saved;
+        }
+    } else {
+        uv.y0 = (bgm % 8) * 0x20;
+        uv.y1 = uv.y0 + 0x20;
+        uv.unk10 = bgm / 8;
+
+        Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_off", &ref);
+        Flash_ClipSetUv(f, &ref, &uv);
+        Flash_ClipSetTex(f, &ref, uv.unk10);
+
+        if (sPortSongNameHidden) {
+            Flash_ClipSetFlags(f, &ref, 2, 1);
+        }
+
+        Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_on", &ref);
+        Flash_ClipSetUv(f, &ref, &uv);
+        Flash_ClipSetTex(f, &ref, uv.unk10);
+
+        if (sPortSongNameHidden) {
+            Flash_ClipSetFlags(f, &ref, 2, 1);
+            sPortSongNameHidden = 0;
+        }
+
+        if (!PortGame_IsBT4() &&
+            PortStageSel_Enabled() &&
+            bgm >= 0 && bgm < 24 &&
+            gUiSongReady) {
+
+            s32 cx = 0, cy = 0, px = 0, py = 0;
+            s32 have = 0;
+
             Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_off", &ref);
-            Flash_ClipSetUv(f, &ref, &uv);
-            Flash_ClipSetTex(f, &ref, uv.unk10);
-            if (sPortSongNameHidden) {
-                /* Back on a song of the disc after an added one: the clips that were switched off for the added
-                   song's name come back. (The game itself never switches them; without this the names stayed
-                   invisible while scrolling the list, until the menu's animation reset the clips.) */
-                Flash_ClipSetFlags(f, &ref, 2, 1);
+            if (ref.id >= 0) {
+                Flash_ClipGetPos(f, &ref, &cx, &cy);
+                have = 1;
             }
+
             Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_on", &ref);
-            Flash_ClipSetUv(f, &ref, &uv);
-            Flash_ClipSetTex(f, &ref, uv.unk10);
-            if (sPortSongNameHidden) {
-                Flash_ClipSetFlags(f, &ref, 2, 1);
-                sPortSongNameHidden = 0;
+            if (!have && ref.id >= 0) {
+                Flash_ClipGetPos(f, &ref, &cx, &cy);
+            }
+
+            Flash_FindLabel(f, NULL, "mc_bgm_now", &ref);
+            if (ref.id >= 0) {
+                Flash_ClipGetPos(f, &ref, &px, &py);
+
+                Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_off", &ref);
+                Flash_ClipSetFlags(f, &ref, 2, 0);
+
+                Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_on", &ref);
+                Flash_ClipSetFlags(f, &ref, 2, 0);
+
+                sPortSongNameHidden = 1;
+
+                gUiSongX = px + cx;
+                gUiSongY = py + cy;
+                gUiSongW = 0x200;
+                gUiSongH = 0x20;
+                gUiSongLit = !have;
+                gUiSongIdx = -(bgm + 2);
             }
         }
     }
+}
 #else
     uv.y0 = (gCharSel->bgmIds[gCharSel->stage->bgm] % 8) * 0x20;
     uv.y1 = uv.y0 + 0x20;
