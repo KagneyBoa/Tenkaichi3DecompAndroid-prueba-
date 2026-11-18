@@ -1423,7 +1423,7 @@ const char *songName = bgm == CHARSEL_BGM_RANDOM
             Flash_FindLabel(f, NULL, name, &ref);
 
             if (ref.id >= 0) {
-                Flash_ClipSetScale(f, &ref, 2.0f, 2.0f);
+                Flash_ClipSetScaleMenu(f, &ref, 2.0f, 2.0f);
             }
         }
     }
