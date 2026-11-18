@@ -3490,50 +3490,49 @@ bool overlay = nameOn || songOn;
         // including added names rendered while Menu font is Original.
         ImDrawList *dl = ImGui::GetBackgroundDrawList();
 
+        
         if (nameOn) {
-        if (nameOn) {
-    const char *stageName = gUiNameIdx >= 0
-        ? PortStages_Name(gUiNameIdx)
-        : stageNames[originalStage];
+            const char *stageName = gUiNameIdx >= 0
+                ? PortStages_Name(gUiNameIdx)
+                : stageNames[originalStage];
 
-    const FontName *fn = font_name(NF_STAGE, stageName);
-    float x = (float)gUiPresentX + (float)gUiNameX * sx;
-    float y = (float)gUiPresentY + (float)gUiNameY * sy;
+            const FontName *fn = font_name(NF_STAGE, stageName);
+            float x = (float)gUiPresentX + (float)gUiNameX * sx;
+            float y = (float)gUiPresentY + (float)gUiNameY * sy;
 
-    if (fn != NULL) {
-        float kx = (float)gUiNameW * sx / 384.0f;
-        float ky = (float)gUiNameH * sy / 48.0f;
-        font_draw(dl, fn, x - 64.0f * kx,
-                  y + (1.5f - 14.0f) * ky, kx, ky, true);
-    } else {
-        name_text(dl, stageName, x, y,
-                  (float)gUiNameW * sx,
-                  (float)gUiNameH * sy, true);
-    }
-}
+            if (fn != NULL) {
+                float kx = (float)gUiNameW * sx / 384.0f;
+                float ky = (float)gUiNameH * sy / 48.0f;
+                font_draw(dl, fn, x - 64.0f * kx,
+                          y + (1.5f - 14.0f) * ky, kx, ky, true);
+            } else {
+                name_text(dl, stageName, x, y,
+                          (float)gUiNameW * sx,
+                          (float)gUiNameH * sy, true);
+            }
+        }
 
-if (songOn) {
-    const char *songName = gUiSongIdx >= 0
-        ? PortSongs_Name(gUiSongIdx)
-        : songNames[originalSong];
+        if (songOn) {
+            const char *songName = gUiSongIdx >= 0
+                ? PortSongs_Name(gUiSongIdx)
+                : songNames[originalSong];
 
-    const FontName *fn = font_name(
-        gUiSongLit ? NF_SONG_LIT : NF_SONG, songName);
+            const FontName *fn = font_name(
+                gUiSongLit ? NF_SONG_LIT : NF_SONG, songName);
 
-    float x = (float)gUiPresentX + (float)gUiSongX * sx;
-    float y = (float)gUiPresentY + (float)gUiSongY * sy;
+            float x = (float)gUiPresentX + (float)gUiSongX * sx;
+            float y = (float)gUiPresentY + (float)gUiSongY * sy;
 
-    if (fn != NULL) {
-        font_draw(dl, fn, x, y,
-                  (float)gUiSongW * sx / 512.0f,
-                  (float)gUiSongH * sy / 32.0f, false);
-    } else {
-        name_text(dl, songName, x, y,
-                  (float)gUiSongW * sx,
-                  (float)gUiSongH * sy, false);
-    }
-}
-    }
+            if (fn != NULL) {
+                font_draw(dl, fn, x, y,
+                          (float)gUiSongW * sx / 512.0f,
+                          (float)gUiSongH * sy / 32.0f, false);
+            } else {
+                name_text(dl, songName, x, y,
+                          (float)gUiSongW * sx,
+                          (float)gUiSongH * sy, false);
+            }
+        }
     ImGui::Render();
     return true;
 }
