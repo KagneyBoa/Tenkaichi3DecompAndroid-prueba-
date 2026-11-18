@@ -1201,8 +1201,8 @@ void CharSel_Draw(void) {
             sPortSongNameHidden = 0;
 
             if (!PortGame_IsBT4() &&
-                PortStageSel_Enabled() &&
-                bgm >= 0 && bgm < 24) {
+    PortStageSel_Enabled() &&
+    bgm >= 0 && bgm <= CHARSEL_BGM_RANDOM) {
 
                 cx = 0;
                 cy = 0;
@@ -1240,11 +1240,15 @@ void CharSel_Draw(void) {
                         gUiSongW = 0x200;
                         gUiSongH = 0x20;
                         gUiSongLit = !have;
-                        gUiSongIdx = -(bgm + 2);
+                        gUiSongIdx = bgm == CHARSEL_BGM_RANDOM
+    ? -26
+    : -(bgm + 2);
                     } else {
                         const char *const *songNames = MenuTranslation_SongNames();
-                        const char *songName = songNames != NULL
-                            ? songNames[bgm] : NULL;
+const char *songName = bgm == CHARSEL_BGM_RANDOM
+    ? "Random"
+    : (songNames != NULL && bgm < 24
+        ? songNames[bgm] : NULL);
 
                         if (songName != NULL) {
                             FontStyle saved = gFontStyle;
