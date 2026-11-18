@@ -1204,7 +1204,7 @@ if (shown && ref.id >= 0) {
 
             if (!PortGame_IsBT4() &&
     PortStageSel_Enabled() &&
-    bgm >= 0 && bgm <= CHARSEL_BGM_RANDOM) {
+    bgm >= 0 && bgm < 24) {
 
                 cx = 0;
                 cy = 0;
