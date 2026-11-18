@@ -1413,21 +1413,7 @@ const char *songName = bgm == CHARSEL_BGM_RANDOM
             Flash_ClipSetFlags(f, &ref, 0x80, (u8)gCharSel->side[i]->mask);
         }
     }
-#ifdef PORT
-    /* Enlarge the six stage thumbnails without changing their texture assignments. */
-    if (!PortGame_IsBT4() && (gCharSel->flags & CHARSEL_STAGE_PHASE)) {
-        f = &gCharSel->flash[0];
 
-        for (i = 0; i < 6; i++) {
-            sprintf(name, "mc_map_chip_%02d", i);
-            Flash_FindLabel(f, NULL, name, &ref);
-
-            if (ref.id >= 0) {
-                Flash_ClipSetScaleMenu(f, &ref, 2.0f, 2.0f);
-            }
-        }
-    }
-#endif
     for (i = 0; i < CHARSEL_FLASH_NUM; i++) {
         Flash_Draw(&gCharSel->flash[i]);
     }
