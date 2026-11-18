@@ -55,6 +55,7 @@ extern void TextBox_Init(MTextBox *box, void *text, u32 preset);
 extern void TextBox_SetUnk80(MTextBox *box, s32 value);
 extern void TextBox_AttachLine(MFlash *flash, MFlashRef *ref, s32 x, s32 y, s32 line, MTextBox *box);
 extern void Flash_ClipSetOffset(MFlash *flash, MFlashRef *ref, s32 x, s32 y);
+extern void Flash_ClipSetScale(MFlash *flash, MFlashRef *ref, f32 x, f32 y);
 extern void IconWin_SetIcon(s32 icon);
 extern s32 ChrGrid_IsSelectable(MChrCell *cells, s32 index);
 extern s32 ChrGrid_MoveRight(MChrCell *cells, s32 *col, s32 row);
