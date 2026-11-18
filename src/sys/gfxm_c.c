@@ -1257,6 +1257,10 @@ void Flash_ClipSetScale(Flash *flash, FlashRef *ref, f32 x, f32 y) {
         FlashClipList_SetScale(flash->clips, ref, x, y);
     }
 }
+/* Adapter for menu modules that use their local MFlash / MFlashRef layout views. */
+void Flash_ClipSetScaleMenu(void *flash, void *ref, f32 x, f32 y) {
+    Flash_ClipSetScale((Flash *)flash, (FlashRef *)ref, x, y);
+}
 
 /* Gives a clip an alpha multiplier; a negative value is refused. */
 void Flash_ClipSetAlpha(Flash *flash, FlashRef *ref, f32 alpha) {
