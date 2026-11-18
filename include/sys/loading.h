@@ -107,7 +107,10 @@ typedef struct Progress {
 } Progress;
 
 extern LoadScreen gLoadScreen;
+
+#ifndef SYS_LOADING_NO_PROGRESS_EXTERN
 extern Progress *gProgress;
+#endif
 
 void Load_RunBlocking(void);
 void Load_BuildSprites(void);
