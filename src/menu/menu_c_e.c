@@ -1250,8 +1250,13 @@ if (shown && ref.id >= 0) {
 }
                     } else {
                         const char *const *songNames = MenuTranslation_SongNames();
-const char *songName = songNames != NULL
-    ? songNames[bgm] : NULL;
+const char *songName = NULL;
+
+if (bgm == CHARSEL_BGM_RANDOM) {
+    songName = "Random";
+} else if (songNames != NULL && bgm < 24) {
+    songName = songNames[bgm];
+}
 
                         if (songName != NULL) {
                             FontStyle saved = gFontStyle;
