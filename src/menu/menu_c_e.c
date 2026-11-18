@@ -1111,131 +1111,6 @@ void CharSel_Draw(void) {
 
     uv.x0 = 0;
     uv.x1 = 0x200;
-#ifdef PORT
-    {
-        extern void Flash_ClipGetPos(MFlash *flash, MFlashRef *ref, s32 *x, s32 *y);
-        s32 bgm = gCharSel->bgmIds[gCharSel->stage->bgm];
-
-        if (bgm >= PORT_SONG_FIRST_OFFSET && !PortGame_IsBT4()) {
-            s32 idx = bgm - PORT_SONG_FIRST_OFFSET;
-            s32 cx, cy, px, py;
-            /* Use the clip's real position: the game moves "mc_bgm_now" per screen (on the BGM select it is the
-               bottom bar; on the map select it sits over the reel) and the child carries its own offset. */
-            /* Which of the two name clips exists depends on the menu's state: "off" while the music line is not
-               being chosen, "on" while its list is open. The position is taken from the one that is there (an
-               empty reference leaves the coordinates as they were: taking "off" alone put the name at whatever
-               the stack held while the list was open, and it was not seen). */
-            s32 have = 0;
-            s32 shown = 0; /* one of the two name clips exists: this screen shows the music's name */
-            cx = 0;
-            cy = 0;
-            Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_off", &ref);
-            if (ref.id >= 0) {
-                Flash_ClipGetPos(f, &ref, &cx, &cy);
-                have = 1;
-            }
-            Flash_ClipSetFlags(f, &ref, 2, 0);
-            Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_on", &ref);
-            if (!have && ref.id >= 0) {
-                Flash_ClipGetPos(f, &ref, &cx, &cy);
-                shown = 1;
-            }
-            shown |= have;
-            Flash_ClipSetFlags(f, &ref, 2, 0);
-            sPortSongNameHidden = 1; /* the game's own name clips are off while an added song's name is shown */
-            Flash_FindLabel(f, NULL, "mc_bgm_now", &ref);
-            Flash_ClipGetPos(f, &ref, &px, &py);
-            if (!shown) {
-                /* (a screen of this menu without the music line: nothing to draw, as for the stage's name) */
-            } else if (gUiSongReady) {
-                /* The port draws the track's name (its own art) over the menu, at the clip's own place. */
-                gUiSongX = px + cx;
-                gUiSongY = py + cy;
-                gUiSongW = 0x200;
-                gUiSongH = 0x20;
-                gUiSongLit = !have; /* the "on" clip: the music list is open */
-                gUiSongIdx = idx;
-                {
-                    extern void Port_SongDebug(int state, int idx, int px, int py, int cx, int cy); /* headless.c */
-                    Port_SongDebug((int)gCharSel->stage->state, (int)idx, (int)px, (int)py, (int)cx, (int)cy);
-                }
-            } else if (idx >= 0 && idx < gPortSongCount) {
-                /* No overlay (the OpenGL back end has none yet): print the name with the game's own font. */
-                extern void Font_PrintAsciiAt(s32 x, s32 y, char *str);
-                extern s32 Font_GetGlyphHeight(void);
-                extern FontStyle gFontStyle;
-                FontStyle saved = gFontStyle;
-                gFontStyle.align = FONT_ALIGN_LEFT;
-                gFontStyle.color = 0xFFFFFFFF;
-                gFontStyle.shadowMode = FONT_SHADOW_DROP;
-                gFontStyle.shadowColor = 0xC0000000;
-{
-    extern void Flash_ClipGetPos(MFlash *flash, MFlashRef *ref, s32 *x, s32 *y);
-
-    s32 bgm = gCharSel->bgmIds[gCharSel->stage->bgm];
-
-    if (bgm >= PORT_SONG_FIRST_OFFSET && !PortGame_IsBT4()) {
-        s32 idx = bgm - PORT_SONG_FIRST_OFFSET;
-        s32 cx = 0, cy = 0, px = 0, py = 0;
-        s32 have = 0;
-        s32 shown = 0;
-
-        Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_off", &ref);
-        if (ref.id >= 0) {
-            Flash_ClipGetPos(f, &ref, &cx, &cy);
-            have = 1;
-        }
-        Flash_ClipSetFlags(f, &ref, 2, 0);
-
-        Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_on", &ref);
-        if (!have && ref.id >= 0) {
-            Flash_ClipGetPos(f, &ref, &cx, &cy);
-            shown = 1;
-        }
-        shown |= have;
-        Flash_ClipSetFlags(f, &ref, 2, 0);
-
-        sPortSongNameHidden = 1;
-
-        Flash_FindLabel(f, NULL, "mc_bgm_now", &ref);
-        Flash_ClipGetPos(f, &ref, &px, &py);
-
-        if (shown && gUiSongReady) {
-            gUiSongX = px + cx;
-            gUiSongY = py + cy;
-            gUiSongW = 0x200;
-            gUiSongH = 0x20;
-            gUiSongLit = !have;
-            gUiSongIdx = idx;
-
-            {
-                extern void Port_SongDebug(int state, int idx, int px, int py, int cx, int cy);
-                Port_SongDebug((int)gCharSel->stage->state,
-                               (int)idx, (int)px, (int)py, (int)cx, (int)cy);
-            }
-        } else if (shown && idx >= 0 && idx < gPortSongCount) {
-            extern void Font_PrintAsciiAt(s32 x, s32 y, char *str);
-            extern s32 Font_GetGlyphHeight(void);
-            extern FontStyle gFontStyle;
-
-            FontStyle saved = gFontStyle;
-            gFontStyle.align = FONT_ALIGN_LEFT;
-            gFontStyle.color = 0xFFFFFFFF;
-            gFontStyle.shadowMode = FONT_SHADOW_DROP;
-            gFontStyle.shadowColor = 0xC0000000;
-
-            Font_PrintAsciiAt(
-                px + cx,
-                py + cy + (0x20 - Font_GetGlyphHeight()) / 2,
-                gPortSongNames[idx]
-            );
-
-            gFontStyle = saved;
-        }
-    } else {
-        uv.y0 = (bgm % 8) * 0x20;
-        uv.y1 = uv.y0 + 0x20;
-        uv.unk10 = bgm / 8;
 
 #ifdef PORT
     {
@@ -1243,7 +1118,6 @@ void CharSel_Draw(void) {
         extern void Font_PrintAsciiAt(s32 x, s32 y, char *str);
         extern s32 Font_GetGlyphHeight(void);
         extern FontStyle gFontStyle;
-        extern const char *const *MenuTranslation_SongNames(void);
 
         s32 bgm = gCharSel->bgmIds[gCharSel->stage->bgm];
         s32 cx = 0, cy = 0, px = 0, py = 0;
@@ -1269,36 +1143,37 @@ void CharSel_Draw(void) {
             }
 
             shown |= have;
-            sPortSongNameHidden = 1;
+            sPortSongNameHidden = shown;
 
             Flash_FindLabel(f, NULL, "mc_bgm_now", &ref);
-            if (ref.id >= 0) {
+            if (shown && ref.id >= 0) {
                 Flash_ClipGetPos(f, &ref, &px, &py);
-            }
 
-            if (shown && gUiSongReady) {
-                gUiSongX = px + cx;
-                gUiSongY = py + cy;
-                gUiSongW = 0x200;
-                gUiSongH = 0x20;
-                gUiSongLit = !have;
-                gUiSongIdx = idx;
-            } else if (shown && idx >= 0 && idx < gPortSongCount) {
-                FontStyle saved = gFontStyle;
-                gFontStyle.align = FONT_ALIGN_LEFT;
-                gFontStyle.color = 0xFFFFFFFF;
-                gFontStyle.shadowMode = FONT_SHADOW_DROP;
-                gFontStyle.shadowColor = 0xC0000000;
-                gFontStyle.shadowDx = 1;
-                gFontStyle.shadowDy = 1;
+                if (gUiSongReady) {
+                    gUiSongX = px + cx;
+                    gUiSongY = py + cy;
+                    gUiSongW = 0x200;
+                    gUiSongH = 0x20;
+                    gUiSongLit = !have;
+                    gUiSongIdx = idx;
+                } else if (idx >= 0 && idx < gPortSongCount &&
+                           gPortSongNames[idx] != NULL) {
+                    FontStyle saved = gFontStyle;
+                    gFontStyle.align = FONT_ALIGN_LEFT;
+                    gFontStyle.color = 0xFFFFFFFF;
+                    gFontStyle.shadowMode = FONT_SHADOW_DROP;
+                    gFontStyle.shadowColor = 0xC0000000;
+                    gFontStyle.shadowDx = 1;
+                    gFontStyle.shadowDy = 1;
 
-                Font_PrintAsciiAt(
-                    px + cx,
-                    py + cy + (0x20 - Font_GetGlyphHeight()) / 2,
-                    gPortSongNames[idx]
-                );
+                    Font_PrintAsciiAt(
+                        px + cx,
+                        py + cy + (0x20 - Font_GetGlyphHeight()) / 2,
+                        gPortSongNames[idx]
+                    );
 
-                gFontStyle = saved;
+                    gFontStyle = saved;
+                }
             }
         } else {
             uv.y0 = (bgm % 8) * 0x20;
@@ -1331,6 +1206,8 @@ void CharSel_Draw(void) {
 
                 cx = 0;
                 cy = 0;
+                px = 0;
+                py = 0;
                 have = 0;
                 shown = 0;
 
@@ -1402,6 +1279,7 @@ void CharSel_Draw(void) {
     Flash_ClipSetUv(f, &ref, &uv);
     Flash_ClipSetTex(f, &ref, uv.unk10);
 #endif
+
        
 
     for (i = 0; i < CHARSEL_SIDES; i++) {
