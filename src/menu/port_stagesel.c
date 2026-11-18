@@ -219,8 +219,6 @@ void PortStageSel_Draw(void) {
     }
 
     /* Six columns and six rows, with responsive cell widths. */
-    for (row = 0; row < 6; row++) {
-        for (col = 0; col < 6; col++) {
     /* Six columns and six rows, with stage thumbnails. */
 for (row = 0; row < 6; row++) {
     for (col = 0; col < 6; col++) {
