@@ -1146,8 +1146,9 @@ void CharSel_Draw(void) {
             sPortSongNameHidden = shown;
 
             Flash_FindLabel(f, NULL, "mc_bgm_now", &ref);
-            if (shown && ref.id >= 0) {
-                Flash_ClipGetPos(f, &ref, &px, &py);
+if (shown && ref.id >= 0) {
+    Flash_ClipSetOffset(f, &ref, 0xCE, -0x43);
+    Flash_ClipGetPos(f, &ref, &px, &py);
 
                 if (gUiSongReady) {
                     gUiSongX = px + cx;
@@ -1230,8 +1231,9 @@ void CharSel_Draw(void) {
                 shown |= have;
 
                 Flash_FindLabel(f, NULL, "mc_bgm_now", &ref);
-                if (shown && ref.id >= 0) {
-                    Flash_ClipGetPos(f, &ref, &px, &py);
+if (shown && ref.id >= 0) {
+    Flash_ClipSetOffset(f, &ref, 0xCE, -0x43);
+    Flash_ClipGetPos(f, &ref, &px, &py);
                     sPortSongNameHidden = 1;
 
                     if (gUiSongReady) {
