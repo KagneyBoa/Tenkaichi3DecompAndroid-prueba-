@@ -1055,13 +1055,47 @@ void CharSel_Draw(void) {
                        strip, in an opaque white with a drop shadow (the style is copied into the command). */
                     FontStyle saved = gFontStyle;
                     gFontStyle.align = FONT_ALIGN_CENTER;
-                    gFontStyle.color = 0xFFFFFFFF;
-                    gFontStyle.shadowMode = FONT_SHADOW_DROP;
-                    gFontStyle.shadowColor = 0xC0000000;
-                    gFontStyle.shadowDx = 1;
-                    gFontStyle.shadowDy = 1;
-                    Font_PrintAsciiAt(nx + 0x100, ny + (0x40 - Font_GetGlyphHeight()) / 2, gPortStageNames[idx]);
-                    gFontStyle = saved;
+
+#ifdef PORT
+    {
+        extern void Flash_ClipGetPos(MFlash *flash, MFlashRef *ref, s32 *x, s32 *y);
+        extern void Font_PrintAsciiAt(s32 x, s32 y, char *str);
+        extern s32 Font_GetGlyphHeight(void);
+        extern FontStyle gFontStyle;
+
+        s32 nameId = gCharSel->stage->stage;
+        s32 nx = 0, ny = 0;
+
+        if (!PortGame_IsBT4() && nameId >= 0x24) {
+            s32 idx = nameId - 0x24;
+
+            if (ref.id >= 0) {
+                Flash_ClipSetFlags(f, &ref, 2, 0);
+                sPortStageNameHidden = 1;
+                Flash_ClipGetPos(f, &ref, &nx, &ny);
+
+                if (idx >= 0 && idx < gPortExtraStageCount) {
+                    if (gUiNameReady) {
+                        gUiNameX = nx + 64;
+                        gUiNameY = ny + 14;
+                        gUiNameW = 0x180;
+                        gUiNameH = 0x30;
+                        gUiNameIdx = idx;
+                    } else {
+                        FontStyle saved = gFontStyle;
+                        gFontStyle.align = FONT_ALIGN_CENTER;
+                        gFontStyle.color = 0xFFFFFFFF;
+                        gFontStyle.shadowMode = FONT_SHADOW_DROP;
+                        gFontStyle.shadowColor = 0xC0000000;
+                        gFontStyle.shadowDx = 1;
+                        gFontStyle.shadowDy = 1;
+                        Font_PrintAsciiAt(
+                            nx + 0x100,
+                            ny + (0x40 - Font_GetGlyphHeight()) / 2,
+                            gPortStageNames[idx]
+                        );
+                        gFontStyle = saved;
+                    }
                 }
             }
         } else {
@@ -1070,7 +1104,38 @@ void CharSel_Draw(void) {
             uv.unk10 = nameId / 4;
             Flash_ClipSetUv(f, &ref, &uv);
             Flash_ClipSetTex(f, &ref, uv.unk10);
-            if (sPortStageNameHidden) { /* back on a stage of the disc: its name clip was off for the added one */
+
+            if (!PortGame_IsBT4() &&
+                PortStageSel_Enabled() &&
+                nameId >= 0 && nameId < 36 &&
+                ref.id >= 0) {
+
+                Flash_ClipGetPos(f, &ref, &nx, &ny);
+                Flash_ClipSetFlags(f, &ref, 2, 0);
+                sPortStageNameHidden = 1;
+
+                if (gUiNameReady) {
+                    gUiNameX = nx + 64;
+                    gUiNameY = ny + 14;
+                    gUiNameW = 0x180;
+                    gUiNameH = 0x30;
+                    gUiNameIdx = -(nameId + 2);
+                } else {
+                    FontStyle saved = gFontStyle;
+                    gFontStyle.align = FONT_ALIGN_CENTER;
+                    gFontStyle.color = 0xFFFFFFFF;
+                    gFontStyle.shadowMode = FONT_SHADOW_DROP;
+                    gFontStyle.shadowColor = 0xC0000000;
+                    gFontStyle.shadowDx = 1;
+                    gFontStyle.shadowDy = 1;
+                    Font_PrintAsciiAt(
+                        nx + 0x100,
+                        ny + (0x40 - Font_GetGlyphHeight()) / 2,
+                        MenuTranslation_StageNames()[nameId]
+                    );
+                    gFontStyle = saved;
+                }
+            } else if (sPortStageNameHidden) {
                 Flash_ClipSetFlags(f, &ref, 2, 1);
                 sPortStageNameHidden = 0;
             }
@@ -1080,6 +1145,7 @@ void CharSel_Draw(void) {
     Flash_ClipSetUv(f, &ref, &uv);
     Flash_ClipSetTex(f, &ref, uv.unk10);
 #endif
+
     Flash_FindLabel(f, NULL, "mc_map_mask", &ref);
     if (gCharSel->stage->mask != 0) {
         Flash_ClipSetFlags(f, &ref, 0x102, 1);
