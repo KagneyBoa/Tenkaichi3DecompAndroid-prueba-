@@ -1204,7 +1204,7 @@ if (shown && ref.id >= 0) {
 
             if (!PortGame_IsBT4() &&
     PortStageSel_Enabled() &&
-    bgm >= 0 && bgm < 24) {
+    bgm >= 0 && bgm <= CHARSEL_BGM_RANDOM {
 
                 cx = 0;
                 cy = 0;
@@ -1243,7 +1243,11 @@ if (shown && ref.id >= 0) {
                         gUiSongW = 0x200;
                         gUiSongH = 0x20;
                         gUiSongLit = !have;
-                        gUiSongIdx = -(bgm + 2);
+                        if (bgm == CHARSEL_BGM_RANDOM) {
+    gUiSongIdx = -26;
+} else {
+    gUiSongIdx = -(bgm + 2);
+}
                     } else {
                         const char *const *songNames = MenuTranslation_SongNames();
 const char *songName = songNames != NULL
