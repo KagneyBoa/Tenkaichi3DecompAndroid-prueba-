@@ -1300,64 +1300,160 @@ void CharSel_Draw(void) {
         uv.y1 = uv.y0 + 0x20;
         uv.unk10 = bgm / 8;
 
-        Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_off", &ref);
-        Flash_ClipSetUv(f, &ref, &uv);
-        Flash_ClipSetTex(f, &ref, uv.unk10);
+#ifdef PORT
+    {
+        extern void Flash_ClipGetPos(MFlash *flash, MFlashRef *ref, s32 *x, s32 *y);
+        extern void Font_PrintAsciiAt(s32 x, s32 y, char *str);
+        extern s32 Font_GetGlyphHeight(void);
+        extern FontStyle gFontStyle;
+        extern const char *const *MenuTranslation_SongNames(void);
 
-        if (sPortSongNameHidden) {
-            Flash_ClipSetFlags(f, &ref, 2, 1);
-        }
+        s32 bgm = gCharSel->bgmIds[gCharSel->stage->bgm];
+        s32 cx = 0, cy = 0, px = 0, py = 0;
+        s32 have = 0, shown = 0;
 
-        Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_on", &ref);
-        Flash_ClipSetUv(f, &ref, &uv);
-        Flash_ClipSetTex(f, &ref, uv.unk10);
-
-        if (sPortSongNameHidden) {
-            Flash_ClipSetFlags(f, &ref, 2, 1);
-            sPortSongNameHidden = 0;
-        }
-
-        if (!PortGame_IsBT4() &&
-            PortStageSel_Enabled() &&
-            bgm >= 0 && bgm < 24 &&
-            gUiSongReady) {
-
-            s32 cx = 0, cy = 0, px = 0, py = 0;
-            s32 have = 0;
+        if (bgm >= PORT_SONG_FIRST_OFFSET && !PortGame_IsBT4()) {
+            s32 idx = bgm - PORT_SONG_FIRST_OFFSET;
 
             Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_off", &ref);
             if (ref.id >= 0) {
                 Flash_ClipGetPos(f, &ref, &cx, &cy);
+                Flash_ClipSetFlags(f, &ref, 2, 0);
                 have = 1;
             }
 
             Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_on", &ref);
-            if (!have && ref.id >= 0) {
-                Flash_ClipGetPos(f, &ref, &cx, &cy);
+            if (ref.id >= 0) {
+                if (!have) {
+                    Flash_ClipGetPos(f, &ref, &cx, &cy);
+                }
+                Flash_ClipSetFlags(f, &ref, 2, 0);
+                shown = 1;
             }
+
+            shown |= have;
+            sPortSongNameHidden = 1;
 
             Flash_FindLabel(f, NULL, "mc_bgm_now", &ref);
             if (ref.id >= 0) {
                 Flash_ClipGetPos(f, &ref, &px, &py);
+            }
 
-                Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_off", &ref);
-                Flash_ClipSetFlags(f, &ref, 2, 0);
-
-                Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_on", &ref);
-                Flash_ClipSetFlags(f, &ref, 2, 0);
-
-                sPortSongNameHidden = 1;
-
+            if (shown && gUiSongReady) {
                 gUiSongX = px + cx;
                 gUiSongY = py + cy;
                 gUiSongW = 0x200;
                 gUiSongH = 0x20;
                 gUiSongLit = !have;
-                gUiSongIdx = -(bgm + 2);
+                gUiSongIdx = idx;
+            } else if (shown && idx >= 0 && idx < gPortSongCount) {
+                FontStyle saved = gFontStyle;
+                gFontStyle.align = FONT_ALIGN_LEFT;
+                gFontStyle.color = 0xFFFFFFFF;
+                gFontStyle.shadowMode = FONT_SHADOW_DROP;
+                gFontStyle.shadowColor = 0xC0000000;
+                gFontStyle.shadowDx = 1;
+                gFontStyle.shadowDy = 1;
+
+                Font_PrintAsciiAt(
+                    px + cx,
+                    py + cy + (0x20 - Font_GetGlyphHeight()) / 2,
+                    gPortSongNames[idx]
+                );
+
+                gFontStyle = saved;
+            }
+        } else {
+            uv.y0 = (bgm % 8) * 0x20;
+            uv.y1 = uv.y0 + 0x20;
+            uv.unk10 = bgm / 8;
+
+            Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_off", &ref);
+            if (ref.id >= 0) {
+                Flash_ClipSetUv(f, &ref, &uv);
+                Flash_ClipSetTex(f, &ref, uv.unk10);
+                if (sPortSongNameHidden) {
+                    Flash_ClipSetFlags(f, &ref, 2, 1);
+                }
+            }
+
+            Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_on", &ref);
+            if (ref.id >= 0) {
+                Flash_ClipSetUv(f, &ref, &uv);
+                Flash_ClipSetTex(f, &ref, uv.unk10);
+                if (sPortSongNameHidden) {
+                    Flash_ClipSetFlags(f, &ref, 2, 1);
+                }
+            }
+
+            sPortSongNameHidden = 0;
+
+            if (!PortGame_IsBT4() &&
+                PortStageSel_Enabled() &&
+                bgm >= 0 && bgm < 24) {
+
+                cx = 0;
+                cy = 0;
+                have = 0;
+                shown = 0;
+
+                Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_off", &ref);
+                if (ref.id >= 0) {
+                    Flash_ClipGetPos(f, &ref, &cx, &cy);
+                    Flash_ClipSetFlags(f, &ref, 2, 0);
+                    have = 1;
+                }
+
+                Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_on", &ref);
+                if (ref.id >= 0) {
+                    if (!have) {
+                        Flash_ClipGetPos(f, &ref, &cx, &cy);
+                    }
+                    Flash_ClipSetFlags(f, &ref, 2, 0);
+                    shown = 1;
+                }
+
+                shown |= have;
+
+                Flash_FindLabel(f, NULL, "mc_bgm_now", &ref);
+                if (shown && ref.id >= 0) {
+                    Flash_ClipGetPos(f, &ref, &px, &py);
+                    sPortSongNameHidden = 1;
+
+                    if (gUiSongReady) {
+                        gUiSongX = px + cx;
+                        gUiSongY = py + cy;
+                        gUiSongW = 0x200;
+                        gUiSongH = 0x20;
+                        gUiSongLit = !have;
+                        gUiSongIdx = -(bgm + 2);
+                    } else {
+                        const char *const *songNames = MenuTranslation_SongNames();
+                        const char *songName = songNames != NULL
+                            ? songNames[bgm] : NULL;
+
+                        if (songName != NULL) {
+                            FontStyle saved = gFontStyle;
+                            gFontStyle.align = FONT_ALIGN_LEFT;
+                            gFontStyle.color = 0xFFFFFFFF;
+                            gFontStyle.shadowMode = FONT_SHADOW_DROP;
+                            gFontStyle.shadowColor = 0xC0000000;
+                            gFontStyle.shadowDx = 1;
+                            gFontStyle.shadowDy = 1;
+
+                            Font_PrintAsciiAt(
+                                px + cx,
+                                py + cy + (0x20 - Font_GetGlyphHeight()) / 2,
+                                (char *)songName
+                            );
+
+                            gFontStyle = saved;
+                        }
+                    }
+                }
             }
         }
     }
-}
 #else
     uv.y0 = (gCharSel->bgmIds[gCharSel->stage->bgm] % 8) * 0x20;
     uv.y1 = uv.y0 + 0x20;
@@ -1369,6 +1465,7 @@ void CharSel_Draw(void) {
     Flash_ClipSetUv(f, &ref, &uv);
     Flash_ClipSetTex(f, &ref, uv.unk10);
 #endif
+       
 
     for (i = 0; i < CHARSEL_SIDES; i++) {
         f = &gCharSel->flash[3 + i];
