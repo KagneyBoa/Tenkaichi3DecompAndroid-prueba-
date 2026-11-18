@@ -3305,10 +3305,25 @@ static bool frame_build(void) {
         sNoticeUntil = SDL_GetTicks() + 6000;
         notice = sNotice[0] != '\0';
     }
-    // the name of a stage added from outside the disc, over the stage select (a strip of pre-rendered names)
-    bool nameOn = gUiNameReady != 0 && gUiNameIdx >= 0 && gUiNameIdx < PortStages_Count();
-    bool songOn = gUiSongReady != 0 && gUiSongIdx >= 0 && gUiSongIdx < PortSongs_Count(); // (the same for an added song)
-    bool overlay = nameOn || songOn;
+    // Stage and song names: added names use non-negative indices;
+// original names use -(index + 2). -1 means no name.
+const char *const *stageNames = MenuTranslation_StageNames();
+const char *const *songNames = MenuTranslation_SongNames();
+
+int originalStage = gUiNameIdx <= -2 ? -gUiNameIdx - 2 : -1;
+int originalSong = gUiSongIdx <= -2 ? -gUiSongIdx - 2 : -1;
+
+bool nameOn = gUiNameReady != 0 &&
+    ((gUiNameIdx >= 0 && gUiNameIdx < PortStages_Count()) ||
+     (originalStage >= 0 && originalStage < 36 &&
+      stageNames != NULL && stageNames[originalStage] != NULL));
+
+bool songOn = gUiSongReady != 0 &&
+    ((gUiSongIdx >= 0 && gUiSongIdx < PortSongs_Count()) ||
+     (originalSong >= 0 && originalSong < 24 &&
+      songNames != NULL && songNames[originalSong] != NULL));
+
+bool overlay = nameOn || songOn;
     bool meter = sReady && meter_on();
     // the players' names under the gauges of an online fight
     bool names = sReady && Port_NetActive() && BtlChar_FindByObjId(0) != NULL && (Port_NetName(0)[0] != '\0' || Port_NetName(1)[0] != '\0');
@@ -3476,24 +3491,48 @@ static bool frame_build(void) {
         ImDrawList *dl = ImGui::GetBackgroundDrawList();
 
         if (nameOn) {
-            const FontName *fn = font_name(NF_STAGE, PortStages_Name(gUiNameIdx));
-            float x = (float)gUiPresentX + (float)gUiNameX * sx, y = (float)gUiPresentY + (float)gUiNameY * sy;
-            if (fn != NULL) {
-                float kx = (float)gUiNameW * sx / 384.0f, ky = (float)gUiNameH * sy / 48.0f;
-                font_draw(dl, fn, x - 64.0f * kx, y + (1.5f - 14.0f) * ky, kx, ky, true);
-            } else {
-                name_text(dl, PortStages_Name(gUiNameIdx), x, y, (float)gUiNameW * sx, (float)gUiNameH * sy, true);
-            }
-        }
-        if (songOn) {
-            const FontName *fn = font_name(gUiSongLit ? NF_SONG_LIT : NF_SONG, PortSongs_Name(gUiSongIdx));
-            float x = (float)gUiPresentX + (float)gUiSongX * sx, y = (float)gUiPresentY + (float)gUiSongY * sy;
-            if (fn != NULL) {
-                font_draw(dl, fn, x, y, (float)gUiSongW * sx / 512.0f, (float)gUiSongH * sy / 32.0f, false);
-            } else {
-                name_text(dl, PortSongs_Name(gUiSongIdx), x, y, (float)gUiSongW * sx, (float)gUiSongH * sy, false);
-            }
-        }
+        if (nameOn) {
+    const char *stageName = gUiNameIdx >= 0
+        ? PortStages_Name(gUiNameIdx)
+        : stageNames[originalStage];
+
+    const FontName *fn = font_name(NF_STAGE, stageName);
+    float x = (float)gUiPresentX + (float)gUiNameX * sx;
+    float y = (float)gUiPresentY + (float)gUiNameY * sy;
+
+    if (fn != NULL) {
+        float kx = (float)gUiNameW * sx / 384.0f;
+        float ky = (float)gUiNameH * sy / 48.0f;
+        font_draw(dl, fn, x - 64.0f * kx,
+                  y + (1.5f - 14.0f) * ky, kx, ky, true);
+    } else {
+        name_text(dl, stageName, x, y,
+                  (float)gUiNameW * sx,
+                  (float)gUiNameH * sy, true);
+    }
+}
+
+if (songOn) {
+    const char *songName = gUiSongIdx >= 0
+        ? PortSongs_Name(gUiSongIdx)
+        : songNames[originalSong];
+
+    const FontName *fn = font_name(
+        gUiSongLit ? NF_SONG_LIT : NF_SONG, songName);
+
+    float x = (float)gUiPresentX + (float)gUiSongX * sx;
+    float y = (float)gUiPresentY + (float)gUiSongY * sy;
+
+    if (fn != NULL) {
+        font_draw(dl, fn, x, y,
+                  (float)gUiSongW * sx / 512.0f,
+                  (float)gUiSongH * sy / 32.0f, false);
+    } else {
+        name_text(dl, songName, x, y,
+                  (float)gUiSongW * sx,
+                  (float)gUiSongH * sy, false);
+    }
+}
     }
     ImGui::Render();
     return true;
