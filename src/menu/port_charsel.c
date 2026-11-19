@@ -1178,7 +1178,7 @@ void PortCharSel_MuteOn(void) {
 
 /* Once a frame, before the screen is drawn: what it shows now, which models are wanted, and the 3D view on or off. */
 void PortCharSel_Frame(const CsView *view, s32 split, s32 stagePhase) {
-    s32 scene = s3D && PortCharSel_Shown(stagePhase);
+    s32 scene = s3D && (stagePhase || PortCharSel_Shown(stagePhase));
     s32 i;
 
     sSplit = split != 0;
@@ -1392,6 +1392,34 @@ for (i = 0; i < 2; i++) {
     }
 
     Font_FlushAll();
+}
+
+/* Draw both selected fighters on the stage selection screen. */
+void PortCharSel_DrawStage(void) {
+    f32 screenX[2] = { 50.0f, 462.0f };
+    s32 i;
+
+    if (!sOn || !s3D || !sInScene) {
+        return;
+    }
+
+    /* Draw the two fighter pedestals. */
+    for (i = 0; i < 2; i++) {
+        sRed = sViews[i].side == 1;
+        Cs_Pedestal(i);
+    }
+    sRed = 0;
+
+    /* Render both selected fighters. */
+    if (Port_NetListShown()) {
+        ChrView_PortFrame(
+            screenX,
+            sYawOf,
+            sShownChara,
+            sShownCostume,
+            1
+        );
+    }
 }
 
 /* The item panel over everything (after the game's panel's movie, which is not shown). */
