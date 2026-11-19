@@ -244,7 +244,13 @@ void PortStageSel_Draw(void) {
             f32 x = margin + (f32)col * (cellW + gap);
             f32 y = 300.0f + (f32)row * 22.0f;
             s32 index = pageStart + col + row * 4;
-            s32 id = gCharSel->stageIds[index];
+s32 id;
+
+if (index >= gCharSel->stageCount) {
+    continue;
+}
+
+id = gCharSel->stageIds[index];
 
             if (index == selected) {
                 StageSel_Rect(
