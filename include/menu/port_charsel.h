@@ -44,6 +44,7 @@ void PortCharSel_MuteOn(void);
 /* view[0] alone, or with split the two sides, view[side]: two people choosing, both seen as they choose */
 void PortCharSel_Frame(const CsView *view, s32 split, s32 stagePhase);
 void PortCharSel_Draw(void);
+void PortCharSel_DrawStage(void);
 void PortCharSel_DrawItems(void);
 void PortCharSel_DrawEnd(void);
 s32 PortCharSel_NetSide(s32 fallback);
