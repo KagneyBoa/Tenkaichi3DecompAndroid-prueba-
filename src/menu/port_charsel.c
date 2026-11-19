@@ -1429,7 +1429,7 @@ void PortCharSel_DrawStage(void) {
             sShownChara,
             sShownCostume,
             1,
-            0.75f
+            1.0f
         );
     }
 }
