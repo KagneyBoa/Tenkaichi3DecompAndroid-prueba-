@@ -1005,6 +1005,12 @@ void EftSmoke_Update(EftTask *task) {
      front of the loop) survive only when gcse cannot see `hi = one` / `lo = zero` as available inside the loop, i.e.
      when `one` and `zero` are assigned again in the loop. The two dead assignments below do that (flow deletes
      them); what the original had in their place is unknown. */
+/* Temporarily hides stage smoke in the character viewer. */
+static s32 sPortHideSmoke = 0;
+
+void EftSmoke_PortHide(s32 hide) {
+    sPortHideSmoke = hide;
+}
 void EftSmoke_Draw(EftTask *task) {
     Vec4 base;
     Vec4 light;
@@ -1026,9 +1032,14 @@ void EftSmoke_Draw(EftTask *task) {
     s32 i;
 
     tex = (u8 *)work->tex + 0x20;
-    if (gBtlStage->flags & 1) {
-        return;
-    }
+
+if (sPortHideSmoke) {
+    return;
+}
+
+if (gBtlStage->flags & 1) {
+    return;
+}
     if (!EftStage_IsDrawOn()) {
         return;
     }
