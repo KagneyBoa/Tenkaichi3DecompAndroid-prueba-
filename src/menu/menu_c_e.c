@@ -94,17 +94,63 @@ extern void ItemHelp_Term(void);
 extern void ItemHelp_Draw(s32 arg);
 
 
+
+/* Previous stage cursor while the BGM chip is selected. */
+static s32 sPortStageBeforeBgm = 0;
+
 /* Move through the four-column visual stage grid while preserving
-   the original six-column stage index used by the game. */
+   the original six-column stage index used by the game.
+
+   Return values:
+   0 = no movement
+   1 = moved to another stage
+   2 = entered the BGM chip
+   3 = returned from the BGM chip
+*/
 static s32 PortStageSel_Move(s32 dx, s32 dy) {
-    s32 index = gCharSel->stage->col +
-                gCharSel->stage->row * 6;
-    s32 candidate = index;
+    s32 index;
+    s32 candidate;
     s32 count = gCharSel->stageCount;
+
+    /* The BGM chip returns to the stage from which it was selected. */
+    if (gCharSel->stage->col == CHARSEL_STAGE_BGM_COL) {
+        if (dy == 0) {
+            return 0;
+        }
+
+        candidate = sPortStageBeforeBgm;
+
+        gCharSel->stage->col = candidate % 6;
+        gCharSel->stage->row = candidate / 6;
+
+        CharSel_SetStageChips();
+        return 3;
+    }
+
+    index = gCharSel->stage->col +
+            gCharSel->stage->row * 6;
 
     if (index < 0 || index >= count) {
         return 0;
     }
+
+    /* Moving up from the first visual row enters the BGM chip. */
+    if (dy < 0 && index < 4) {
+        sPortStageBeforeBgm = index;
+        gCharSel->stage->col = CHARSEL_STAGE_BGM_COL;
+        CharSel_SetStageChips();
+        return 2;
+    }
+
+    /* Moving down from the last visual row enters the BGM chip. */
+    if (dy > 0 && index / 4 == (count - 1) / 4) {
+        sPortStageBeforeBgm = index;
+        gCharSel->stage->col = CHARSEL_STAGE_BGM_COL;
+        CharSel_SetStageChips();
+        return 2;
+    }
+
+    candidate = index;
 
     for (;;) {
         if (dx < 0) {
@@ -134,6 +180,7 @@ static s32 PortStageSel_Move(s32 dx, s32 dy) {
         }
     }
 }
+
 
 
 /* The seven chips of a side's reel show the cursor's row of the character grid. */
