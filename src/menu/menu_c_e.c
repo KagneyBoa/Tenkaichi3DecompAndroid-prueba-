@@ -1573,9 +1573,9 @@ void CharSel_Input(s32 *running) {
                 }
                 Snd_PlaySe(2, 0);
             } else if ((gPad[0].gameRepeat & 8) && gCharSel->stage->col != CHARSEL_STAGE_BGM_COL) {
-                if (gCharSel->stageRows < 2) {
-                    return;
-                }
+                if (gCharSel->stageCount <= 4) {
+    return;
+}
                 Flash_GotoLabel(&gCharSel->flash[0], "fl_reel_down", 1);
                 gCharSel->stage->mask = 1;
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_off_start");
@@ -1585,9 +1585,9 @@ void CharSel_Input(s32 *running) {
                 CharSel_RequestStage();
                 Snd_PlaySe(2, 2);
             } else if ((gPad[0].gameRepeat & 4) && gCharSel->stage->col != CHARSEL_STAGE_BGM_COL) {
-                if (gCharSel->stageCount <= 4) { {
-                    return;
-                }
+                if (gCharSel->stageCount <= 4) {
+    return;
+}
                 Flash_GotoLabel(&gCharSel->flash[0], "fl_reel_up", 1);
                 gCharSel->stage->mask = 1;
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_off_start");
