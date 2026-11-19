@@ -748,7 +748,9 @@ void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 spl
         Gfx_MarkPass(0);
         Gfx_MarkPass(4);
         Gfx_AddDefaultEnv();
+        EftSmoke_PortHide(1);
         BtlScene_Draw(1);
+        EftSmoke_PortHide(0);
         Ot_Draw();
         Gfx_MarkPass(0);
         for (side = 0; side < sides; side++) {
