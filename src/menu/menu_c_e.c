@@ -1030,7 +1030,6 @@ static s32 CharSel_PortFormRow(s32 n) {
 /* One pad a side: the two people choosing are both on the screen as they choose, as on the game's own. */
 static void CharSel_PortFrame(void) {
 
-static void CharSel_PortFrame(void) {
     CsView v[2];
 
     /* During stage selection, keep both selected fighters available. */
