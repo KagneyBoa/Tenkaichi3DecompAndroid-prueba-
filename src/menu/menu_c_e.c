@@ -1671,6 +1671,7 @@ if (gPad[0].gameRepeat & 1) {
     }
 
     Snd_PlaySe(2, 1);
+   } else if (gPad[0].gamePressed & 0x200) {
 
                 gCharSel->stage->mask = 0;
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_ok");
