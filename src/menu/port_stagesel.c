@@ -293,20 +293,7 @@ for (row = 0; row < 6; row++) {
         );
     }
 
-        StageSel_Rect(
-            145.0f, 254.0f, 367.0f, 284.0f,
-            musicSelected
-                ? Ps_Rgba(35, 112, 205, 245)
-                : Ps_Rgba(13, 42, 79, 225)
-        );
-
-        StageSel_Frame(
-            145.0f, 254.0f, 367.0f, 284.0f,
-            musicSelected
-                ? Ps_Rgba(130, 205, 255, 255)
-                : Ps_Rgba(63, 117, 174, 190)
-        );
-    }
+        
 
     Port_GsMarker(0x25);
 }
