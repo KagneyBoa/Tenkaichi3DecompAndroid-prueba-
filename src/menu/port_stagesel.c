@@ -232,15 +232,15 @@ cellW = (gridWidth - gap * 3.0f) / 4.0f;
     selected = -1;
 
     if (gCharSel->stage->col >= 0 &&
-        gCharSel->stage->col < 6 &&
-        gCharSel->stage->row >= 0 &&
-        gCharSel->stage->row < 6) {
-        selected = gCharSel->stage->col +
-                   gCharSel->stage->row * 6;
+    gCharSel->stage->col < 6 &&
+    gCharSel->stage->row >= 0 &&
+    gCharSel->stage->row < gCharSel->stageRows) {
+    selected = gCharSel->stage->col +
+               gCharSel->stage->row * 6;
 
-        /* Each page displays twelve stages. */
-        sVisiblePage = selected / 12;
-    }
+    /* Each page displays twelve stages. */
+    sVisiblePage = selected / 12;
+}
 
     pageStart = sVisiblePage * 12;
 
