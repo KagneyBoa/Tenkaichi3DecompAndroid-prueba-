@@ -1177,50 +1177,63 @@ void PortCharSel_MuteOn(void) {
 }
 
 /* Once a frame, before the screen is drawn: what it shows now, which models are wanted, and the 3D view on or off. */
+
 void PortCharSel_Frame(const CsView *view, s32 split, s32 stagePhase) {
     s32 scene = s3D && (stagePhase || PortCharSel_Shown(stagePhase));
+    s32 nextSplit = split != 0;
     s32 i;
 
-    sSplit = split != 0;
-sViews[0] = view[0];
-if (sSplit) {
-    sViews[1] = view[1];
-}
-
-/* Detect which player moved their cursor this frame. */
-for (i = 0; i < (sSplit ? 2 : 1); i++) {
-    s32 row = sViews[i].showCustom ? sViews[i].customRow : sViews[i].row;
-    s32 col = sViews[i].showCustom ? sViews[i].customCol : sViews[i].col;
-
-    if (sLastCursorRow[i] >= 0 &&
-        (row != sLastCursorRow[i] || col != sLastCursorCol[i])) {
-        sLastMovedPlayer = i;
+    /* The viewer must be rebuilt when changing from one fighter to two. */
+    if (sInScene && s3D && sSplit != nextSplit) {
+        ChrView_PortEnd();
     }
 
-    sLastCursorRow[i] = row;
-    sLastCursorCol[i] = col;
-}
+    sSplit = nextSplit;
+    sViews[0] = view[0];
 
-sV = sViews[0];
+    if (sSplit) {
+        sViews[1] = view[1];
+    }
+
+    /* Detect which player moved their cursor this frame. */
+    for (i = 0; i < (sSplit ? 2 : 1); i++) {
+        s32 row = sViews[i].showCustom ? sViews[i].customRow : sViews[i].row;
+        s32 col = sViews[i].showCustom ? sViews[i].customCol : sViews[i].col;
+
+        if (sLastCursorRow[i] >= 0 &&
+            (row != sLastCursorRow[i] || col != sLastCursorCol[i])) {
+            sLastMovedPlayer = i;
+        }
+
+        sLastCursorRow[i] = row;
+        sLastCursorCol[i] = col;
+    }
+
+    sV = sViews[0];
     sNow = 0;
     sTick++;
     sInScene = scene;
+
     Port_MenuScene3D(scene);
+
     if (!scene) {
         return;
     }
+
     for (i = 0; i < (sSplit ? 2 : 1); i++) {
-        if (sViews[i].chara != sWantChara[i] || sViews[i].color != sWantCostume[i]) {
+        if (sViews[i].chara != sWantChara[i] ||
+            sViews[i].color != sWantCostume[i]) {
             sWantChara[i] = sViews[i].chara;
             sWantCostume[i] = sViews[i].color;
             sRest[i] = 0;
         } else if (sRest[i] < CS_WAIT) {
             sRest[i]++;
         }
+
         if (sRest[i] >= CS_WAIT) {
             sShownChara[i] = sWantChara[i];
-            /* (the cursor keeps the last fighter's costume: a number this one may not have, whose file is empty) */
             sShownCostume[i] = sWantCostume[i];
+
             if (sWantChara[i] >= 0 && sWantChara[i] < MCHR_RANDOM) {
                 ChrTbl_WrapCostume(sWantChara[i], &sShownCostume[i]);
             } else {
@@ -1229,6 +1242,7 @@ sV = sViews[0];
         }
     }
 }
+
 
 static f32 Cs_GridWidth(void) {
     return (Cs_UnitsAcross(CS_CELL_H) * 48.0f / 41.0f + Cs_UnitsAcross(CS_GAP)) * MCHR_COLS + Cs_UnitsAcross(CS_GAP);
