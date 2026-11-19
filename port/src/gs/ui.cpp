@@ -3528,14 +3528,14 @@ bool overlay = nameOn || songOn;
             float y = (float)gUiPresentY + (float)gUiSongY * sy;
 
             if (fn != NULL) {
-                font_draw(dl, fn, x, y,
-                          (float)gUiSongW * sx / 512.0f,
-                          (float)gUiSongH * sy / 32.0f, false);
-            } else {
-                name_text(dl, songName, x, y,
-                          (float)gUiSongW * sx,
-                          (float)gUiSongH * sy, false);
-                        }
+    font_draw(dl, fn, x, y,
+              (float)gUiSongW * sx / 512.0f,
+              (float)gUiSongH * sy / 32.0f, true);
+} else {
+    name_text(dl, songName, x, y,
+              (float)gUiSongW * sx,
+              (float)gUiSongH * sy, true);
+}
         }
     }
     ImGui::Render();
