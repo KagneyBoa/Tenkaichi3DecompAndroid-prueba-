@@ -93,40 +93,48 @@ extern void ItemHelp_Init(void *data);
 extern void ItemHelp_Term(void);
 extern void ItemHelp_Draw(s32 arg);
 
-/* The six chips of the stage reel show the cursor's row of the stage grid. */
-void CharSel_SetStageChips(void) {
-    s32 slot[6] = { 8, 11, 12, 13, 14, 15 };
-    s32 i;
 
-    for (i = 0; i < 6; i++) {
-        s32 id = gCharSel->stageIds[i + gCharSel->stage->row * 6];
-        MTexRes *res;
+/* Move through the four-column visual stage grid while preserving
+   the original six-column stage index used by the game. */
+static s32 PortStageSel_Move(s32 dx, s32 dy) {
+    s32 index = gCharSel->stage->col +
+                gCharSel->stage->row * 6;
+    s32 candidate = index;
+    s32 count = gCharSel->stageCount;
 
-        gCharSel->stage->chip[1][i] = gCharSel->stage->chip[0][i];
-        gCharSel->stage->chip[0][i] = id;
-#ifdef PORT
-        /* PC build: the icon pack holds one icon per stage plus the locked and empty ones (37, 38). A map added
-           from outside the disc (id >= 0x24) borrows an icon; the markers keep theirs even though they moved up. */
-        {
-            s32 icon;
-            if (id == STGGRID_ID_LOCKED) {
-                icon = 37;
-            } else if (id == STGGRID_ID_EMPTY) {
-                icon = 38;
-            } else if (id >= 0x24 && !PortGame_IsBT4()) {
-                icon = 1 + (id - 0x24) % 36;
-            } else {
-                icon = id + 1;
+    if (index < 0 || index >= count) {
+        return 0;
+    }
+
+    for (;;) {
+        if (dx < 0) {
+            if (candidate % 4 == 0) {
+                return 0;
             }
-            res = (MTexRes *)MPACK_AT(gCharSel->stagePack, icon);
+            candidate--;
+        } else if (dx > 0) {
+            if (candidate % 4 == 3) {
+                return 0;
+            }
+            candidate++;
+        } else {
+            candidate += dy * 4;
         }
-#else
-        res = (MTexRes *)MPACK_AT(gCharSel->stagePack, id + 1);
-#endif
-        gCharSel->tex[41 + i] = gCharSel->tex[slot[i]];
-        gCharSel->tex[slot[i]] = res->tex;
+
+        if (candidate < 0 || candidate >= count) {
+            return 0;
+        }
+
+        if (StgGrid_IsSelectable(gCharSel->stageIds, candidate)) {
+            gCharSel->stage->col = candidate % 6;
+            gCharSel->stage->row = candidate / 6;
+
+            CharSel_SetStageChips();
+            return 1;
+        }
     }
 }
+
 
 /* The seven chips of a side's reel show the cursor's row of the character grid. */
 void CharSel_SetRowChips(s32 side) {
