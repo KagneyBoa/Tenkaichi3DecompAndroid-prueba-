@@ -1556,7 +1556,7 @@ void CharSel_Input(s32 *running) {
         case CHARSEL_ST_STAGE:
             if (gPad[0].gameRepeat & 1) {
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_off_start");
-                StgGrid_MoveLeft(gCharSel->stageIds, &gCharSel->stage->col, gCharSel->stage->row);
+                PortStageSel_Move(-1, 0);
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_on_start");
                 if (gCharSel->stage->col != CHARSEL_STAGE_BGM_COL) {
                     gCharSel->stage->stage = gCharSel->stageIds[gCharSel->stage->col + gCharSel->stage->row * 6];
@@ -1565,7 +1565,7 @@ void CharSel_Input(s32 *running) {
                 Snd_PlaySe(2, 0);
             } else if (gPad[0].gameRepeat & 2) {
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_off_start");
-                StgGrid_MoveRight(gCharSel->stageIds, &gCharSel->stage->col, gCharSel->stage->row);
+                PortStageSel_Move(1, 0);
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_on_start");
                 if (gCharSel->stage->col != CHARSEL_STAGE_BGM_COL) {
                     gCharSel->stage->stage = gCharSel->stageIds[gCharSel->stage->col + gCharSel->stage->row * 6];
@@ -1579,20 +1579,20 @@ void CharSel_Input(s32 *running) {
                 Flash_GotoLabel(&gCharSel->flash[0], "fl_reel_down", 1);
                 gCharSel->stage->mask = 1;
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_off_start");
-                StgGrid_MoveUp(gCharSel->stageIds, &gCharSel->stage->col, &gCharSel->stage->row, gCharSel->stageRows);
+                PortStageSel_Move(0, -1);
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_on_start");
                 CharSel_SetStageChips();
                 gCharSel->stage->stage = gCharSel->stageIds[gCharSel->stage->col + gCharSel->stage->row * 6];
                 CharSel_RequestStage();
                 Snd_PlaySe(2, 2);
             } else if ((gPad[0].gameRepeat & 4) && gCharSel->stage->col != CHARSEL_STAGE_BGM_COL) {
-                if (gCharSel->stageRows < 2) {
+                if (gCharSel->stageCount <= 4) { {
                     return;
                 }
                 Flash_GotoLabel(&gCharSel->flash[0], "fl_reel_up", 1);
                 gCharSel->stage->mask = 1;
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_off_start");
-                StgGrid_MoveDown(gCharSel->stageIds, &gCharSel->stage->col, &gCharSel->stage->row, gCharSel->stageRows);
+                PortStageSel_Move(0, 1);
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_on_start");
                 CharSel_SetStageChips();
                 gCharSel->stage->stage = gCharSel->stageIds[gCharSel->stage->col + gCharSel->stage->row * 6];
