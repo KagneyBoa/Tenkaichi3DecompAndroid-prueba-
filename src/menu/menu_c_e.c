@@ -1581,8 +1581,7 @@ void CharSel_Input(s32 *running) {
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_off_start");
                 PortStageSel_Move(0, -1);
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_on_start");
-                CharSel_SetStageChips();
-                gCharSel->stage->stage = gCharSel->stageIds[gCharSel->stage->col + gCharSel->stage->row * 6];
+                
                 CharSel_RequestStage();
                 Snd_PlaySe(2, 2);
             } else if ((gPad[0].gameRepeat & 4) && gCharSel->stage->col != CHARSEL_STAGE_BGM_COL) {
@@ -1594,8 +1593,7 @@ void CharSel_Input(s32 *running) {
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_off_start");
                 PortStageSel_Move(0, 1);
                 CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_on_start");
-                CharSel_SetStageChips();
-                gCharSel->stage->stage = gCharSel->stageIds[gCharSel->stage->col + gCharSel->stage->row * 6];
+                
                 CharSel_RequestStage();
                 Snd_PlaySe(2, 1);
             } else if (gPad[0].gamePressed & 0x200) {
