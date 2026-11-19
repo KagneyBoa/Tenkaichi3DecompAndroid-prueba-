@@ -1152,16 +1152,16 @@ if (shown && ref.id >= 0) {
     Flash_ClipGetPos(f, &ref, &px, &py);
 
                 if (gUiSongReady) {
-                    gUiSongX = px + cx;
-                    gUiSongY = py + cy;
-                    gUiSongW = 0x200;
-                    gUiSongH = 0x20;
-                    gUiSongLit = !have;
-                    gUiSongIdx = idx;
+    gUiSongX = 145;
+    gUiSongY = 269;
+    gUiSongW = 222;
+    gUiSongH = 14;
+    gUiSongLit = !have;
+    gUiSongIdx = idx;
                 } else if (idx >= 0 && idx < gPortSongCount &&
                            gPortSongNames[idx] != NULL) {
                     FontStyle saved = gFontStyle;
-                    gFontStyle.align = FONT_ALIGN_LEFT;
+                    gFontStyle.align = FONT_ALIGN_CENTER;
                     gFontStyle.color = 0xFFFFFFFF;
                     gFontStyle.shadowMode = FONT_SHADOW_DROP;
                     gFontStyle.shadowColor = 0xC0000000;
@@ -1169,10 +1169,10 @@ if (shown && ref.id >= 0) {
                     gFontStyle.shadowDy = 1;
 
                     Font_PrintAsciiAt(
-                        px + cx,
-                        py + cy + (0x20 - Font_GetGlyphHeight()) / 2,
-                        gPortSongNames[idx]
-                    );
+    256,
+    269 + (14 - Font_GetGlyphHeight()) / 2,
+    gPortSongNames[idx]
+);
 
                     gFontStyle = saved;
                 }
