@@ -129,6 +129,7 @@ static void StageSel_DrawThumbnail(s32 id, f32 x, f32 y, f32 w, f32 h) {
 void PortStageSel_Begin(void) {
     sEnabled = !Port_Setting("stage_menu_classic", 0);
     sAspectActive = 0;
+    sVisiblePage = 0;
 }
 
 /* End the alternative menu session. */
@@ -161,6 +162,7 @@ void PortStageSel_Draw(void) {
     s32 row;
     s32 col;
     s32 selected;
+    s32 pageStart;
     f32 margin;
     f32 gap;
     f32 cellW;
@@ -178,7 +180,7 @@ void PortStageSel_Draw(void) {
 
     margin = 18.0f;
     gap = 10.0f;
-    cellW = (sCanvasW - margin * 2.0f - gap * 5.0f) / 6.0f;
+    cellW = (sCanvasW - margin * 2.0f - gap * 3.0f) / 4.0f;
 
     Port_GsMarker(0x24);
 
