@@ -23,6 +23,7 @@ extern int Port_AspectMilli(void);
 
 static s32 sEnabled;
 static s32 sAspectActive;
+static s32 sVisiblePage = 0;
 static f32 sCanvasW = 512.0f;
 
 /* Convert the responsive design coordinates to the game's 512-wide buffer. */
