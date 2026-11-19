@@ -269,15 +269,12 @@ for (row = 0; row < 6; row++) {
         );
     }
 }
-    /*
-     * Music selector: centered below the stage name.
-     * Column 6 is the existing music entry.
+        /*
+     * Existing music selector, repositioned below the stage name.
      */
     {
         s32 musicSelected = (gCharSel->stage->col == 6);
-        FontStyle saved = gFontStyle;
 
-        /* Background and selection highlight. */
         StageSel_Rect(
             145.0f, 254.0f, 367.0f, 284.0f,
             musicSelected
@@ -291,6 +288,12 @@ for (row = 0; row < 6; row++) {
                 ? Ps_Rgba(130, 205, 255, 255)
                 : Ps_Rgba(63, 117, 174, 190)
         );
+
+        gUiSongX = 145;
+        gUiSongY = 269;
+        gUiSongW = 222;
+        gUiSongH = 14;
+    }
 
         /* Music title. */
         gFontStyle.align = FONT_ALIGN_CENTER;
