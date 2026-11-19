@@ -1238,10 +1238,10 @@ if (shown && ref.id >= 0) {
                     sPortSongNameHidden = 1;
 
                     if (gUiSongReady) {
-                        gUiSongX = px + cx;
-                        gUiSongY = py + cy;
-                        gUiSongW = 0x200;
-                        gUiSongH = 0x20;
+                        gUiSongX = 145;
+gUiSongY = 269;
+gUiSongW = 222;
+gUiSongH = 14;
                         gUiSongLit = !have;
                         if (bgm == CHARSEL_BGM_RANDOM) {
     gUiSongIdx = -26;
@@ -1260,7 +1260,7 @@ if (bgm == CHARSEL_BGM_RANDOM) {
 
                         if (songName != NULL) {
                             FontStyle saved = gFontStyle;
-                            gFontStyle.align = FONT_ALIGN_LEFT;
+                            gFontStyle.align = FONT_ALIGN_CENTER;
                             gFontStyle.color = 0xFFFFFFFF;
                             gFontStyle.shadowMode = FONT_SHADOW_DROP;
                             gFontStyle.shadowColor = 0xC0000000;
@@ -1268,10 +1268,10 @@ if (bgm == CHARSEL_BGM_RANDOM) {
                             gFontStyle.shadowDy = 1;
 
                             Font_PrintAsciiAt(
-                                px + cx,
-                                py + cy + (0x20 - Font_GetGlyphHeight()) / 2,
-                                (char *)songName
-                            );
+    256,
+    269 + (14 - Font_GetGlyphHeight()) / 2,
+    (char *)songName
+);
 
                             gFontStyle = saved;
                         }
