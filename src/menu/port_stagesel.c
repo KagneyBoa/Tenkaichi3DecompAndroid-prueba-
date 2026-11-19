@@ -270,11 +270,28 @@ for (row = 0; row < 6; row++) {
     }
 }
         
+    
     /*
      * Music selector panel.
      */
     {
         s32 musicSelected = (gCharSel->stage->col == 6);
+        f32 musicX = (sCanvasW - 222.0f) * 0.5f;
+
+        StageSel_Rect(
+            musicX, 254.0f, musicX + 222.0f, 284.0f,
+            musicSelected
+                ? Ps_Rgba(35, 112, 205, 245)
+                : Ps_Rgba(13, 42, 79, 225)
+        );
+
+        StageSel_Frame(
+            musicX, 254.0f, musicX + 222.0f, 284.0f,
+            musicSelected
+                ? Ps_Rgba(130, 205, 255, 255)
+                : Ps_Rgba(63, 117, 174, 190)
+        );
+    }
 
         StageSel_Rect(
             145.0f, 254.0f, 367.0f, 284.0f,
