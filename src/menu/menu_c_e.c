@@ -108,18 +108,50 @@ static s32 sPortStageBgmFromTop = 0;
    2 = entered the BGM chip
    3 = returned from the BGM chip
 */
+
 static s32 PortStageSel_Move(s32 dx, s32 dy) {
     s32 index;
     s32 candidate;
     s32 count = gCharSel->stageCount;
+    s32 step;
+    s32 col;
+    s32 row;
 
-    /* The BGM chip returns to the stage from which it was selected. */
+    /* Handle circular movement when the BGM chip is selected. */
     if (gCharSel->stage->col == CHARSEL_STAGE_BGM_COL) {
         if (dy == 0) {
             return 0;
         }
 
+        col = sPortStageBeforeBgm % 4;
         candidate = sPortStageBeforeBgm;
+
+        /* Moving down from BGM wraps to the first row. */
+        if (!sPortStageBgmFromTop && dy > 0) {
+            for (candidate = col; candidate < count; candidate += 4) {
+                if (StgGrid_IsSelectable(gCharSel->stageIds, candidate)) {
+                    break;
+                }
+            }
+        }
+        /* Moving up from BGM wraps to the last row. */
+        else if (sPortStageBgmFromTop && dy < 0) {
+            candidate = ((count - 1) / 4) * 4 + col;
+
+            if (candidate >= count) {
+                candidate -= 4;
+            }
+
+            for (; candidate >= 0; candidate -= 4) {
+                if (StgGrid_IsSelectable(gCharSel->stageIds, candidate)) {
+                    break;
+                }
+            }
+        }
+
+        if (candidate < 0 || candidate >= count) {
+            candidate = sPortStageBeforeBgm;
+        }
 
         gCharSel->stage->col = candidate % 6;
         gCharSel->stage->row = candidate / 6;
@@ -135,17 +167,19 @@ static s32 PortStageSel_Move(s32 dx, s32 dy) {
         return 0;
     }
 
-    /* Moving up from the first visual row enters the BGM chip. */
+    /* Moving up from the first row enters BGM. */
     if (dy < 0 && index < 4) {
         sPortStageBeforeBgm = index;
+        sPortStageBgmFromTop = 1;
         gCharSel->stage->col = CHARSEL_STAGE_BGM_COL;
         CharSel_SetStageChips();
         return 2;
     }
 
-    /* Moving down from the last visual row enters the BGM chip. */
+    /* Moving down from the last row enters BGM. */
     if (dy > 0 && index / 4 == (count - 1) / 4) {
         sPortStageBeforeBgm = index;
+        sPortStageBgmFromTop = 0;
         gCharSel->stage->col = CHARSEL_STAGE_BGM_COL;
         CharSel_SetStageChips();
         return 2;
@@ -153,20 +187,35 @@ static s32 PortStageSel_Move(s32 dx, s32 dy) {
 
     candidate = index;
 
-    for (;;) {
-        if (dx < 0) {
-            if (candidate % 4 == 0) {
-                return 0;
+    /* Horizontal movement wraps around the four columns. */
+    if (dx != 0) {
+        row = index / 4;
+        col = index % 4;
+
+        for (step = 1; step <= 4; step++) {
+            s32 nextCol;
+
+            nextCol = (col + (dx < 0 ? 4 - step : step)) % 4;
+            candidate = row * 4 + nextCol;
+
+            if (candidate >= count) {
+                continue;
             }
-            candidate--;
-        } else if (dx > 0) {
-            if (candidate % 4 == 3) {
-                return 0;
+
+            if (StgGrid_IsSelectable(gCharSel->stageIds, candidate)) {
+                gCharSel->stage->col = candidate % 6;
+                gCharSel->stage->row = candidate / 6;
+                CharSel_SetStageChips();
+                return 1;
             }
-            candidate++;
-        } else {
-            candidate += dy * 4;
         }
+
+        return 0;
+    }
+
+    /* Vertical movement keeps the original four-column layout. */
+    for (;;) {
+        candidate += dy * 4;
 
         if (candidate < 0 || candidate >= count) {
             return 0;
@@ -175,12 +224,12 @@ static s32 PortStageSel_Move(s32 dx, s32 dy) {
         if (StgGrid_IsSelectable(gCharSel->stageIds, candidate)) {
             gCharSel->stage->col = candidate % 6;
             gCharSel->stage->row = candidate / 6;
-
             CharSel_SetStageChips();
             return 1;
         }
     }
 }
+
 
 
 
