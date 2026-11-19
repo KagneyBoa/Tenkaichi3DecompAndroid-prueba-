@@ -1726,7 +1726,7 @@ if (gPad[0].gameRepeat & 1) {
     moveResult = PortStageSel_Move(0, -1);
     CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_on_start");
 
-    if (moveResult == 1) {
+    if (moveResult == 1 || moveResult == 3) {
         gCharSel->stage->stage =
             gCharSel->stageIds[gCharSel->stage->col +
                                gCharSel->stage->row * 6];
@@ -1746,7 +1746,7 @@ if (gPad[0].gameRepeat & 1) {
     moveResult = PortStageSel_Move(0, 1);
     CharSel_ClipGoto(0, 0, CHARSEL_CLIP_STAGE_CHIP, "fl_on_start");
 
-    if (moveResult == 1) {
+    if (moveResult == 1 || moveResult == 3) {
         gCharSel->stage->stage =
             gCharSel->stageIds[gCharSel->stage->col +
                                gCharSel->stage->row * 6];
