@@ -166,6 +166,8 @@ void PortStageSel_Draw(void) {
     f32 margin;
     f32 gap;
     f32 cellW;
+    f32 gridX;
+    f32 gridWidth;
 
     if (!sEnabled || gCharSel == NULL || gCharSel->stage == NULL) {
         return;
@@ -179,8 +181,12 @@ void PortStageSel_Draw(void) {
     sCanvasW = 512.0f * (f32)Port_AspectMilli() / 1333.0f;
 
     margin = 18.0f;
-    gap = 10.0f;
-    cellW = (sCanvasW - margin * 2.0f - gap * 3.0f) / 4.0f;
+gap = 10.0f;
+
+/* Compact centered grid. */
+gridWidth = sCanvasW * 0.60f;
+gridX = (sCanvasW - gridWidth) * 0.5f;
+cellW = (gridWidth - gap * 3.0f) / 4.0f;
 
     Port_GsMarker(0x24);
 
@@ -241,8 +247,8 @@ void PortStageSel_Draw(void) {
     /* Four columns and three visible rows. */
     for (row = 0; row < 3; row++) {
         for (col = 0; col < 4; col++) {
-            f32 x = margin + (f32)col * (cellW + gap);
-            f32 y = 300.0f + (f32)row * 22.0f;
+            f32 x = gridX + (f32)col * (cellW + gap);
+f32 y = 294.0f + (f32)row * 50.0f;
             s32 index = pageStart + col + row * 4;
 s32 id;
 
@@ -254,33 +260,33 @@ id = gCharSel->stageIds[index];
 
             if (index == selected) {
                 StageSel_Rect(
-                    x, y, x + cellW, y + 18.0f,
+                    x, y, x + cellW, y + 44.0f,
                     Ps_Rgba(35, 112, 205, 220)
                 );
 
                 StageSel_Frame(
-                    x, y, x + cellW, y + 18.0f,
+                    x, y, x + cellW, y + 44.0f,
                     Ps_Rgba(130, 205, 255, 230)
                 );
             } else {
                 StageSel_Rect(
-                    x, y, x + cellW, y + 18.0f,
+                    x, y, x + cellW, y + 44.0f,
                     Ps_Rgba(13, 42, 79, 210)
                 );
 
                 StageSel_Frame(
-                    x, y, x + cellW, y + 18.0f,
+                    x, y, x + cellW, y + 44.0f,
                     Ps_Rgba(63, 117, 174, 150)
                 );
             }
 
             StageSel_DrawThumbnail(
-                id,
-                x + 1.0f,
-                y + 1.0f,
-                cellW - 2.0f,
-                16.0f
-            );
+    id,
+    x + 2.0f,
+    y + 2.0f,
+    cellW - 4.0f,
+    40.0f
+);
         }
     }
 
