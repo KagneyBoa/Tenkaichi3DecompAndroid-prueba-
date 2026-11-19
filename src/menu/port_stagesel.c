@@ -319,7 +319,6 @@ gUiSongH = 14;
         );
     }
 
-        
-
+    PortCharSel_DrawStage();
     Port_GsMarker(0x25);
 }
