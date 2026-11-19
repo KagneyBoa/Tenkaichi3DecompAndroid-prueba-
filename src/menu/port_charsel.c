@@ -1333,7 +1333,7 @@ void PortCharSel_Draw(void) {
 
         if (Port_NetListShown()) {
             ChrView_PortFrame(middle, sYawOf, sShownChara,
-                              sShownCostume, sSplit);
+                  sShownCostume, sSplit, 1.0f);
         }
     }
 
