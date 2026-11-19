@@ -221,6 +221,7 @@ void PortStageSel_Draw(void) {
         Ps_Rgba(48, 137, 224, 180)
     );
 
+    
     /* Current selection. */
     selected = -1;
 
@@ -230,48 +231,53 @@ void PortStageSel_Draw(void) {
         gCharSel->stage->row < 6) {
         selected = gCharSel->stage->col +
                    gCharSel->stage->row * 6;
+
+        /* Each page displays twelve stages. */
+        sVisiblePage = selected / 12;
     }
 
-    /* Six columns and six rows, with responsive cell widths. */
-    /* Six columns and six rows, with stage thumbnails. */
-for (row = 0; row < 6; row++) {
-    for (col = 0; col < 6; col++) {
-        f32 x = margin + (f32)col * (cellW + gap);
-        f32 y = 300.0f + (f32)row * 22.0f;
-        s32 index = col + row * 6;
-        s32 id = gCharSel->stageIds[index];
+    pageStart = sVisiblePage * 12;
 
-        if (index == selected) {
-            StageSel_Rect(
-                x, y, x + cellW, y + 18.0f,
-                Ps_Rgba(35, 112, 205, 220)
-            );
+    /* Four columns and three visible rows. */
+    for (row = 0; row < 3; row++) {
+        for (col = 0; col < 4; col++) {
+            f32 x = margin + (f32)col * (cellW + gap);
+            f32 y = 300.0f + (f32)row * 22.0f;
+            s32 index = pageStart + col + row * 4;
+            s32 id = gCharSel->stageIds[index];
 
-            StageSel_Frame(
-                x, y, x + cellW, y + 18.0f,
-                Ps_Rgba(130, 205, 255, 230)
-            );
-        } else {
-            StageSel_Rect(
-                x, y, x + cellW, y + 18.0f,
-                Ps_Rgba(13, 42, 79, 210)
-            );
+            if (index == selected) {
+                StageSel_Rect(
+                    x, y, x + cellW, y + 18.0f,
+                    Ps_Rgba(35, 112, 205, 220)
+                );
 
-            StageSel_Frame(
-                x, y, x + cellW, y + 18.0f,
-                Ps_Rgba(63, 117, 174, 150)
+                StageSel_Frame(
+                    x, y, x + cellW, y + 18.0f,
+                    Ps_Rgba(130, 205, 255, 230)
+                );
+            } else {
+                StageSel_Rect(
+                    x, y, x + cellW, y + 18.0f,
+                    Ps_Rgba(13, 42, 79, 210)
+                );
+
+                StageSel_Frame(
+                    x, y, x + cellW, y + 18.0f,
+                    Ps_Rgba(63, 117, 174, 150)
+                );
+            }
+
+            StageSel_DrawThumbnail(
+                id,
+                x + 1.0f,
+                y + 1.0f,
+                cellW - 2.0f,
+                16.0f
             );
         }
-
-        StageSel_DrawThumbnail(
-            id,
-            x + 1.0f,
-            y + 1.0f,
-            cellW - 2.0f,
-            16.0f
-        );
     }
-}
+
         
     
     /*
