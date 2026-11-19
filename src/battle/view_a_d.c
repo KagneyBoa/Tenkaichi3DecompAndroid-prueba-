@@ -7,6 +7,7 @@
 #include "sys/heap.h"
 #ifdef PORT
 #include "battle/bobj_a.h"
+extern void EftSmoke_PortHide(s32 hide);
 extern void Bpe_Decode(void *src, void *dst, s32 *size);
 extern void Port_TagTeamFatal(const char *message);
 #endif
