@@ -269,8 +269,9 @@ for (row = 0; row < 6; row++) {
         );
     }
 }
-        /*
-     * Existing music selector, repositioned below the stage name.
+        
+    /*
+     * Music selector panel.
      */
     {
         s32 musicSelected = (gCharSel->stage->col == 6);
@@ -288,32 +289,7 @@ for (row = 0; row < 6; row++) {
                 ? Ps_Rgba(130, 205, 255, 255)
                 : Ps_Rgba(63, 117, 174, 190)
         );
-
-        gUiSongX = 145;
-        gUiSongY = 269;
-        gUiSongW = 222;
-        gUiSongH = 14;
     }
 
-        /* Music title. */
-        gFontStyle.align = FONT_ALIGN_CENTER;
-        gFontStyle.color = 0xFFFFFFFF;
-        gFontStyle.shadowMode = FONT_SHADOW_DROP;
-        gFontStyle.shadowColor = 0xC0000000;
-        gFontStyle.shadowDx = 1;
-        gFontStyle.shadowDy = 1;
-
-        Font_PrintAsciiAt(256, 255, "MUSICA");
-
-        gFontStyle = saved;
-
-        /* Move the existing song-name overlay into this panel. */
-        gUiSongX = 145;
-        gUiSongY = 269;
-        gUiSongW = 222;
-        gUiSongH = 14;
-
-        Font_FlushAll();
-    }
     Port_GsMarker(0x25);
-        }
+}
