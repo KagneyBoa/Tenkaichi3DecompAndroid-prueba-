@@ -97,6 +97,7 @@ extern void ItemHelp_Draw(s32 arg);
 
 /* Previous stage cursor while the BGM chip is selected. */
 static s32 sPortStageBeforeBgm = 0;
+static s32 sPortStageBgmFromTop = 0;
 
 /* Move through the four-column visual stage grid while preserving
    the original six-column stage index used by the game.
