@@ -24,6 +24,7 @@ extern int Port_AspectMilli(void);
 static s32 sEnabled;
 static s32 sAspectActive;
 static f32 sCanvasW = 512.0f;
+extern volatile int gUiSongX, gUiSongY, gUiSongW, gUiSongH;
 
 /* Convert the responsive design coordinates to the game's 512-wide buffer. */
 static f32 StageSel_X(f32 x) {
