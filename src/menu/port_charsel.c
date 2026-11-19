@@ -1408,33 +1408,32 @@ for (i = 0; i < 2; i++) {
     Font_FlushAll();
 }
 
+
 /* Draw both selected fighters on the stage selection screen. */
 void PortCharSel_DrawStage(void) {
-    f32 screenX[2] = { 50.0f, 462.0f };
-    s32 i;
+    f32 screenX[2] = { 65.0f, 447.0f };
+    f32 stageYaw[2] = {
+        sYawOf[0] + 1.5707963f,
+        sYawOf[1] - 1.5707963f
+    };
 
     if (!sOn || !s3D || !sInScene) {
         return;
     }
 
-    /* Draw the two fighter pedestals. */
-    for (i = 0; i < 2; i++) {
-        sRed = sViews[i].side == 1;
-        Cs_Pedestal(i);
-    }
-    sRed = 0;
-
-    /* Render both selected fighters. */
+    /* Render both selected fighters facing each other. */
     if (Port_NetListShown()) {
         ChrView_PortFrame(
             screenX,
-            sYawOf,
+            stageYaw,
             sShownChara,
             sShownCostume,
-            1
+            1,
+            0.75f
         );
     }
 }
+
 
 /* The item panel over everything (after the game's panel's movie, which is not shown). */
 void PortCharSel_DrawItems(void) {
