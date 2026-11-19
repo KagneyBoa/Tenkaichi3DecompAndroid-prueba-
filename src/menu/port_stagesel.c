@@ -2,6 +2,13 @@
 #include "port_stagesel.h"
 #include "menu/menu_d.h"
 #include "menu/port_screen.h"
+#include "battle/col_c.h"
+
+extern void Font_PrintAsciiAt(s32 x, s32 y, char *str);
+extern void Font_FlushAll(void);
+extern FontStyle gFontStyle;
+
+extern volatile int gUiSongX, gUiSongY, gUiSongW, gUiSongH;
 #define SYS_LOADING_NO_PROGRESS_EXTERN
 #define SYS_SPRITE_NO_DRAWPICTURE_EXTERN
 #include "sys/sprite.h"
