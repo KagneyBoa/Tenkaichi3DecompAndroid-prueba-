@@ -24,7 +24,6 @@ extern int Port_AspectMilli(void);
 static s32 sEnabled;
 static s32 sAspectActive;
 static f32 sCanvasW = 512.0f;
-extern volatile int gUiSongX, gUiSongY, gUiSongW, gUiSongH;
 
 /* Convert the responsive design coordinates to the game's 512-wide buffer. */
 static f32 StageSel_X(f32 x) {
@@ -278,10 +277,10 @@ for (row = 0; row < 6; row++) {
     {
         s32 musicSelected = (gCharSel->stage->col == 6);
         f32 musicX = (sCanvasW - 222.0f) * 0.5f;
-                gUiSongX = (s32)(musicX * 512.0f / sCanvasW);
-                gUiSongY = 269;
-                gUiSongW = (s32)(222.0f * 512.0f / sCanvasW);
-                gUiSongH = 14;
+                        gUiSongX = (s32)(musicX * 512.0f / sCanvasW);
+        gUiSongY = 269;
+        gUiSongW = (s32)(222.0f * 512.0f / sCanvasW);
+        gUiSongH = 14;
 
         StageSel_Rect(
             musicX, 254.0f, musicX + 222.0f, 284.0f,
