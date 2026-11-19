@@ -1,6 +1,7 @@
 
 #include "port_stagesel.h"
 #include "menu/menu_d.h"
+#include "menu/port_charsel.h"
 #include "menu/port_screen.h"
 #include "battle/col_c.h"
 
