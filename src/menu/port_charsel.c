@@ -1413,9 +1413,9 @@ for (i = 0; i < 2; i++) {
 void PortCharSel_DrawStage(void) {
     f32 screenX[2] = { 65.0f, 447.0f };
     f32 stageYaw[2] = {
-        sYawOf[0] + 1.5707963f,
-        sYawOf[1] - 1.5707963f
-    };
+    sYawOf[0] - 1.5707963f,
+    sYawOf[1] + 1.5707963f
+};
 
     if (!sOn || !s3D || !sInScene) {
         return;
