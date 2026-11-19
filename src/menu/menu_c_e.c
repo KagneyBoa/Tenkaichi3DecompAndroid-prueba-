@@ -1029,17 +1029,25 @@ static s32 CharSel_PortFormRow(s32 n) {
 
 /* One pad a side: the two people choosing are both on the screen as they choose, as on the game's own. */
 static void CharSel_PortFrame(void) {
+
+static void CharSel_PortFrame(void) {
     CsView v[2];
 
-    if (gCharSel->players == 1) {
+    /* During stage selection, keep both selected fighters available. */
+    if (CHARSEL_PORT_STAGE()) {
         CharSel_PortFill(&v[0], 0);
         CharSel_PortFill(&v[1], 1);
-        PortCharSel_Frame(v, 1, CHARSEL_PORT_STAGE());
+        PortCharSel_Frame(v, 1, 1);
+    } else if (gCharSel->players == 1) {
+        CharSel_PortFill(&v[0], 0);
+        CharSel_PortFill(&v[1], 1);
+        PortCharSel_Frame(v, 1, 0);
     } else {
         CharSel_PortFill(&v[0], gCharSel->turn & 1);
-        PortCharSel_Frame(v, 0, CHARSEL_PORT_STAGE());
+        PortCharSel_Frame(v, 0, 0);
     }
 }
+
 #endif
 void CharSel_Draw(void) {
     MFlashRef ref;
