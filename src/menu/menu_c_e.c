@@ -184,6 +184,40 @@ static s32 PortStageSel_Move(s32 dx, s32 dy) {
 
 
 /* The seven chips of a side's reel show the cursor's row of the character grid. */
+
+/* The six stage chips show the cursor's row of the stage grid. */
+void CharSel_SetStageChips(void) {
+    s32 slot[6] = { 8, 11, 12, 13, 14, 15 };
+    s32 i;
+
+    for (i = 0; i < 6; i++) {
+        s32 id = gCharSel->stageIds[gCharSel->stage->row * 6 + i];
+        MTexRes *res;
+
+        gCharSel->stage->chip[1][i] = gCharSel->stage->chip[0][i];
+        gCharSel->stage->chip[0][i] = id;
+
+#ifdef PORT
+        {
+            s32 icon = id == STGGRID_ID_LOCKED
+                ? 37
+                : (id == STGGRID_ID_EMPTY
+                    ? 38
+                    : (id >= 0x24 && !PortGame_IsBT4()
+                        ? 1 + (id - 0x24) % 36
+                        : id + 1));
+
+            res = (MTexRes *)MPACK_AT(gCharSel->stagePack, icon);
+        }
+#else
+        res = (MTexRes *)MPACK_AT(gCharSel->stagePack, id + 1);
+#endif
+
+        gCharSel->tex[41 + i] = gCharSel->tex[slot[i]];
+        gCharSel->tex[slot[i]] = res->tex;
+    }
+}
+
 void CharSel_SetRowChips(s32 side) {
     s32 slot[7] = { 8, 11, 12, 13, 14, 15, 16 };
     s32 i;
