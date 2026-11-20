@@ -199,6 +199,18 @@ cellW = (gridWidth - gap * 3.0f) / 4.0f;
         0, 0, sCanvasW, 448,
         Ps_Rgba(3, 15, 43, 255)
     );
+    /* Draw the selected stage picture using the original crossfade. */
+for (row = 0; row < 2; row++) {
+    if (gCharSel->bg[row] != NULL &&
+        gCharSel->bgAlpha[row] > 0) {
+        Sprite_DrawPicture(
+            gCharSel->bg[row],
+            0,
+            0,
+            gCharSel->bgAlpha[row]
+        );
+    }
+}
 
     /* Header. */
     StageSel_Rect(
