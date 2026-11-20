@@ -738,7 +738,7 @@ void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 spl
 
 
 /* Optional vertical offset for the stage selection viewer. */
-((BobjObj *)obj)->xf.pos.y -= modelYOffset;
+((BobjObj *)obj)->xf.pos.y += modelYOffset;
 BtlObjXf_Update((BobjObj *)obj);
 
         }
