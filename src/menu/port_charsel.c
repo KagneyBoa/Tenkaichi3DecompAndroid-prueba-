@@ -39,7 +39,7 @@ extern int Port_PageAspectMilli(void);
 extern void Port_MenuScene3D(int on);
 extern void Port_GsMarker(s32 effect);
 extern s32 ChrTbl_GetCost(s32 chara);
-extern void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 split, f32 modelScale);
+extern void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 split, f32 modelScale, s32 battleIdle);
 extern s32 ChrView_PortVisible(s32 side);
 extern void ChrView_PortEnd(void);
 extern int Port_NetListShown(void);
