@@ -518,6 +518,7 @@ static void ChrView_PortOneView(s32 side) {
     sPortChara[side] = -1;
     sPortCostume[side] = -1;
     sPortShown[side] = -1;
+    sPortAnimId[side] = -1;
     sPortNew[side] = NULL;
 }
 
@@ -544,7 +545,16 @@ static void ChrView_PortInit(s32 split) {
     BtlScene_Init(8);
     Fade_Start(0, 1, 1.0f);
 }
+static void ChrView_PortSetAnim(s32 side, ChrViewSlot *slot, s32 motionId) {
+    u8 *obj = BtlObj_Get(slot->obj);
+    s32 at = slot - gChrView->slot;
 
+    if (!BtlObjAnim_PortPlay(obj, sPortMotion[side][at], motionId, 2)) {
+        BtlObjAnim_PlayModel(obj, gChrView->anim, 2);
+    }
+
+    sPortStanding[side] = 1;
+}
 /* Reads a fighter into a free buffer of this side's viewer and makes its object. 0: it could not be used. */
 static s32 ChrView_PortLoad(s32 side, s32 chara, s32 costume) {
     ChrViewSlot *slot = ChrView_AllocSlot();
