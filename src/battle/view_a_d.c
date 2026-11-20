@@ -448,6 +448,7 @@ extern s32 File_PortReadRaw(s32 id, void *buf, s32 cap);
 extern s32 BtlObjAnim_PortPlay(u8 *obj, void *buf, s32 anim, s32 mode);
 extern s32 BtlObjAnim_PortStopped(u8 *obj);
 extern void BtlObjAnim_PortPlace(u8 *obj, f32 x, f32 yaw, f32 scale, const f32 *feet);
+extern void BtlObjAnim_PortPlaceOffset(u8 *obj, f32 x, f32 yaw, f32 scale, const f32 *feet, f32 yOffset);
 extern s32 BtlObjAnim_PortFeet(u8 *obj, f32 *feet);
 extern u32 *gDmaCur;
 extern s32 gDmaVif1Started;
