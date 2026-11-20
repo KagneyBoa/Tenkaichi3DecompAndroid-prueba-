@@ -1411,7 +1411,7 @@ for (i = 0; i < 2; i++) {
 
 /* Draw both selected fighters on the stage selection screen. */
 void PortCharSel_DrawStage(void) {
-    f32 screenX[2] = { 65.0f, 447.0f };
+    f32 screenX[2] = { 48.0f, 464.0f };
     f32 stageYaw[2] = {
     sYawOf[0] - 1.5707963f,
     sYawOf[1] + 1.5707963f
@@ -1429,7 +1429,7 @@ void PortCharSel_DrawStage(void) {
             sShownChara,
             sShownCostume,
                         1,
-            1.0f,
+            1.25f,
             1
         );
     }
