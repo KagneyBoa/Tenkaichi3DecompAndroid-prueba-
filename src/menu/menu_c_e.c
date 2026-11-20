@@ -1593,8 +1593,7 @@ if (bgm == CHARSEL_BGM_RANDOM) {
 #endif
 
 
-    Flash_Draw(&gCharSel->flash[i]);
-    }
+    
     Font_FlushAll();
     IconWin_Draw();
    #ifdef PORT
