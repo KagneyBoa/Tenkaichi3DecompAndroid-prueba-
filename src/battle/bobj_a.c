@@ -896,21 +896,32 @@ s32 BtlObjAnim_PortPlay(BobjObj *obj, void *buf, s32 anim, s32 mode) {
 
 /* Where the select's model stands and how it is turned. feet (x, height, z, BtlObjAnim_PortFeet), for the few fighters
    whose poses stand well away from the model's origin or above it: the place it keeps under the turning point. */
-void BtlObjAnim_PortPlace(BobjObj *obj, f32 x, f32 yaw, f32 scale, const f32 *feet) {
+
+void BtlObjAnim_PortPlaceOffset(BobjObj *obj, f32 x, f32 yaw, f32 scale, const f32 *feet, f32 yOffset) {
     Mtx44 *m = &obj->xf.mtx;
 
     obj->xf.pos.x = x;
     obj->xf.rot.y = yaw;
     obj->xf.scale = scale;
     BtlObjXf_Update(obj);
+
     if (feet == NULL) {
+        obj->xf.pos.y = yOffset;
+        BtlObjXf_Update(obj);
         return;
     }
+
     obj->xf.pos.x = x - (feet[0] * m->m[0][0] + feet[2] * m->m[2][0]);
-    obj->xf.pos.y = -feet[1] * m->m[1][1];
+    obj->xf.pos.y = -feet[1] * m->m[1][1] + yOffset;
     obj->xf.pos.z = -(feet[0] * m->m[0][2] + feet[2] * m->m[2][2]);
     BtlObjXf_Update(obj);
 }
+
+/* Original placement function, without vertical offset. */
+void BtlObjAnim_PortPlace(BobjObj *obj, f32 x, f32 yaw, f32 scale, const f32 *feet) {
+    BtlObjAnim_PortPlaceOffset(obj, x, yaw, scale, feet, 0.0f);
+}
+
 
 /* In the model's own axes, from the pose worked out last: the middle of the two feet (nodes 11 and 15 on every fighter)
    and how far the lower one is from its height at rest (y grows downwards). 0: no such thing to measure. */
