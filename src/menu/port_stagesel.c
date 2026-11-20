@@ -227,6 +227,8 @@ cellW = (gridWidth - gap * 3.0f) / 4.0f;
         margin - 6.0f, 285, sCanvasW - margin + 6.0f, 287,
         Ps_Rgba(48, 137, 224, 180)
     );
+    /* Draw the fighters behind the stage selection interface. */
+PortCharSel_DrawStage();
 
     
     /* Current selection. */
@@ -319,6 +321,6 @@ gUiSongH = 14;
         );
     }
 
-    PortCharSel_DrawStage();
+
     Port_GsMarker(0x25);
 }
