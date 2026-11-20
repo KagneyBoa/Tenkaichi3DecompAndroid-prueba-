@@ -659,8 +659,8 @@ void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 spl
         gChrView = sPortView[side];
         /* a new fighter: read now, on screen three frames later (its first poses have to be worked out) */
         if (sPortNew[side] == NULL && (chara[side] != sPortChara[side] || costume[side] != sPortCostume[side])) {
-            s32 ok = chara[side] >= 0 && chara[side] < CHRVIEW_CHARA_COUNT && ChrView_PortLoad(side, chara[side], costume[side]);
-
+            s32 ok = chara[side] >= 0 && chara[side] < CHRVIEW_CHARA_COUNT &&
+                 ChrView_PortLoad(side, chara[side], costume[side], motionId);
             if (!ok && gChrView->cur != NULL) {
                 ChrView_PortDrop(gChrView->cur);
                 gChrView->cur = NULL;
