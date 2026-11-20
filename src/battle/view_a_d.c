@@ -624,13 +624,14 @@ static void ChrView_PortDrop(ChrViewSlot *slot) {
    by yaw. split: two people choosing, two fighters in one view: one camera, framed for the first character and a little
    back, each fighter scaled to what its own framing would have made of it. What the screen drew before this stays
    behind them. */
-void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 split, f32 modelScale) {
+void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 split, f32 modelScale, s32 battleIdle) {
     u32 *dma = gDmaCur;
     s32 vif = gDmaVif1Started;
     ChrViewCommon *res;
     void *gameStage;
     s32 side;
     s32 sides = split ? 2 : 1;
+    s32 motionId = battleIdle ? 0 : 0x181;
     s32 any = 0;
     ChrViewInfo *ref = ChrView_GetCharaInfo(0);
 
