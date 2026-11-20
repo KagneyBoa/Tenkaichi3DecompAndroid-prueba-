@@ -556,7 +556,7 @@ static void ChrView_PortSetAnim(s32 side, ChrViewSlot *slot, s32 motionId) {
     sPortStanding[side] = 1;
 }
 /* Reads a fighter into a free buffer of this side's viewer and makes its object. 0: it could not be used. */
-static s32 ChrView_PortLoad(s32 side, s32 chara, s32 costume) {
+static s32 ChrView_PortLoad(s32 side, s32 chara, s32 costume, s32 motionId) {
     ChrViewSlot *slot = ChrView_AllocSlot();
     s32 model = ChrView_GetModelFile(chara, costume, 0);
     s32 at;
@@ -591,13 +591,8 @@ static s32 ChrView_PortLoad(s32 side, s32 chara, s32 costume) {
         return 0;
     }
     obj = BtlObj_Get(slot->obj);
-        /* All fighters start directly in their looping hold animation. */
-    if (BtlObjAnim_PortPlay(obj, sPortMotion[side][at], 0x181, 2)) {
-        sPortStanding[side] = 1;
-    } else {
-        BtlObjAnim_PlayModel(obj, gChrView->anim, 2);
-        sPortStanding[side] = 1;
-    }
+    ChrView_PortSetAnim(side, slot, motionId);
+    sPortAnimId[side] = motionId;
     BTL_OBJ_FLAGS(obj) &= ~0x32000000; /* (no shadow pass for it, already while it is not on screen) */
     BtlObj_SetPartVisible(obj, 0, 0);
     sPortNew[side] = slot;
