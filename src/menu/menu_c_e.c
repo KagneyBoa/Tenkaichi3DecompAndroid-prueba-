@@ -1093,7 +1093,15 @@ void CharSel_Draw(void) {
                 gCharSel->bgAlpha[1] = 0x80;
             }
         }
+        #ifdef PORT
+        if (!((gCharSel->flags & CHARSEL_STAGE_PHASE) &&
+              !PortGame_IsBT4() &&
+              PortStageSel_Enabled())) {
+            Sprite_DrawPicture(gCharSel->bg[i], 0, 0, gCharSel->bgAlpha[i]);
+        }
+#else
         Sprite_DrawPicture(gCharSel->bg[i], 0, 0, gCharSel->bgAlpha[i]);
+#endif
     }
 
     f = &gCharSel->flash[0];
