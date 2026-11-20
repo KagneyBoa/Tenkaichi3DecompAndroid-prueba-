@@ -196,7 +196,7 @@ cellW = (gridWidth - gap * 3.0f) / 4.0f;
     /* Blue tint over the preview. */
     StageSel_Rect(
         0, 0, sCanvasW, 448,
-        Ps_Rgba(3, 15, 43, 55)
+        Ps_Rgba(3, 15, 43, 255)
     );
 
     /* Header. */
