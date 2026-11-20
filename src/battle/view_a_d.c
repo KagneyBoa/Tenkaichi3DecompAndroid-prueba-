@@ -624,7 +624,7 @@ static void ChrView_PortDrop(ChrViewSlot *slot) {
    by yaw. split: two people choosing, two fighters in one view: one camera, framed for the first character and a little
    back, each fighter scaled to what its own framing would have made of it. What the screen drew before this stays
    behind them. */
-void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 split, f32 modelScale, s32 battleIdle) {
+void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 split, f32 modelScale, s32 battleIdle, f32 modelYOffset)
     u32 *dma = gDmaCur;
     s32 vif = gDmaVif1Started;
     ChrViewCommon *res;
@@ -730,10 +730,14 @@ void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 spl
             scale *= modelScale;
             BTL_OBJ_FLAGS(obj) &= ~0x30000000; /* no hard shadow: the screen lays a soft one on the pedestal */
             if (sPortPinned[side]) {
-                BtlObjAnim_PortPlace(obj, sPortX[side], yaw[side], scale, &sPortFeet[side][0]);
-            } else {
-                BtlObjAnim_PortPlace(obj, sPortX[side], yaw[side], scale, NULL);
-            }
+    BtlObjAnim_PortPlace(obj, sPortX[side], yaw[side], scale, &sPortFeet[side][0]);
+} else {
+    BtlObjAnim_PortPlace(obj, sPortX[side], yaw[side], scale, NULL);
+}
+
+/* Optional vertical offset for the stage selection viewer. */
+obj->xf.pos.y -= modelYOffset;
+BtlObjXf_Update(obj);
         }
     }
     BtlObj_UpdateAll();
