@@ -1566,7 +1566,14 @@ if (bgm == CHARSEL_BGM_RANDOM) {
     }
 
     for (i = 0; i < CHARSEL_FLASH_NUM; i++) {
-        Flash_Draw(&gCharSel->flash[i]);
+    if (i == 0 &&
+        (gCharSel->flags & CHARSEL_STAGE_PHASE) &&
+        !PortGame_IsBT4() &&
+        PortStageSel_Enabled()) {
+        continue;
+    }
+
+    Flash_Draw(&gCharSel->flash[i]);
     }
     Font_FlushAll();
     IconWin_Draw();
