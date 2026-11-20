@@ -38,7 +38,8 @@
     X(TBO_DB_RADAR, "db_radar")             /* the dragon radar: case, button, green screen (its middle: 512, 588 of 1024 x 1100) */ \
     X(TBO_DB_RING, "db_ring")               /* a thin white ring (tinted): the radar's pulses */ \
     X(TBO_DB_GLASS, "db_glass")             /* dark blue glass (nine pieces): panels and plates */ \
-    X(TBO_STORM_BOLT, "storm_bolt")         /* four lightning bolts side by side, 256 x 1024 each (our own drawing): the full power storm (stg_c.c) */
+X(TBO_STORM_BOLT, "storm_bolt")         /* four lightning bolts side by side, 256 x 1024 each (our own drawing): the full power storm (stg_c.c) */ \
+    X(TBO_STAGE_MENU_BG, "stage_menu_bg")  /* custom stage selector background */         /* four lightning bolts side by side, 256 x 1024 each (our own drawing): the full power storm (stg_c.c) */
 
 #define TBO_ART_ENUM(id, name) id,
 enum { TBO_ART_LIST(TBO_ART_ENUM) TBO_ART_COUNT };
