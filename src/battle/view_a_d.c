@@ -465,6 +465,7 @@ static ChrView *sPortView[2];
 static void *sPortMotion[2][CHRVIEW_SLOT_COUNT];
 static s32 sPortStanding[2];
 static s32 sPortChara[2], sPortCostume[2], sPortShown[2];
+static s32 sPortAnimId[2];
 static f32 sPortX[2];
 static ChrViewSlot *sPortNew[2];
 static s32 sPortCount[2];
