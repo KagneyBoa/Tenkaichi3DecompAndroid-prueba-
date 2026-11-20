@@ -12,11 +12,8 @@ extern FontStyle gFontStyle;
 
 extern volatile int gUiSongX, gUiSongY, gUiSongW, gUiSongH;
 #define SYS_LOADING_NO_PROGRESS_EXTERN
-#define SYS_SPRITE_NO_DRAWPICTURE_EXTERN
 #include "sys/sprite.h"
-#undef SYS_SPRITE_NO_DRAWPICTURE_EXTERN
 #undef SYS_LOADING_NO_PROGRESS_EXTERN
-extern void Sprite_DrawPicture(SpriteRes *res, s32 x, s32 y, s32 alpha);
 
 /* Settings functions provided by port/src/plat_settings.c. */
 extern int Port_Setting(const char *name, int def);
