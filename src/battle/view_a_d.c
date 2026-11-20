@@ -731,16 +731,27 @@ void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 spl
             }
             scale *= modelScale;
             BTL_OBJ_FLAGS(obj) &= ~0x30000000; /* no hard shadow: the screen lays a soft one on the pedestal */
-            if (sPortPinned[side]) {
-    BtlObjAnim_PortPlace(obj, sPortX[side], yaw[side], scale, &sPortFeet[side][0]);
+            
+if (sPortPinned[side]) {
+    BtlObjAnim_PortPlaceOffset(
+        (BobjObj *)obj,
+        sPortX[side],
+        yaw[side],
+        scale,
+        &sPortFeet[side][0],
+        modelYOffset
+    );
 } else {
-    BtlObjAnim_PortPlace(obj, sPortX[side], yaw[side], scale, NULL);
+    BtlObjAnim_PortPlaceOffset(
+        (BobjObj *)obj,
+        sPortX[side],
+        yaw[side],
+        scale,
+        NULL,
+        modelYOffset
+    );
 }
 
-
-/* Optional vertical offset for the stage selection viewer. */
-((BobjObj *)obj)->xf.pos.y += modelYOffset;
-BtlObjXf_Update((BobjObj *)obj);
 
         }
     }
