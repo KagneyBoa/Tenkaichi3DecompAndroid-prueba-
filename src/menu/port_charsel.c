@@ -1431,7 +1431,7 @@ void PortCharSel_DrawStage(void) {
     1,
     1.25f,
     1,
-    0.50f
+    0.70f
 );
     }
 }
