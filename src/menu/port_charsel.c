@@ -1428,8 +1428,9 @@ void PortCharSel_DrawStage(void) {
             stageYaw,
             sShownChara,
             sShownCostume,
-            1,
-            1.0f
+                        1,
+            1.0f,
+            1
         );
     }
 }
