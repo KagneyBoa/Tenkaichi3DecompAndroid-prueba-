@@ -200,6 +200,13 @@ cellW = (gridWidth - gap * 3.0f) / 4.0f;
         0, 0, sCanvasW, 448,
         Ps_Rgba(3, 15, 43, 255)
     );
+        /* Full-screen artwork behind the stage preview and selector. */
+    Ps_SpriteScreen(
+        TBO_STAGE_MENU_BG,
+        0, 0, 512, 448,
+        0.0f, 0.0f, 1.0f, 1.0f,
+        PS_PLAIN, 0x80
+    );
     /* Draw the selected stage picture using the original crossfade. */
 for (row = 0; row < 2; row++) {
     if (gCharSel->bg[row] != NULL &&
