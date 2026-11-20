@@ -625,6 +625,7 @@ static void ChrView_PortDrop(ChrViewSlot *slot) {
    back, each fighter scaled to what its own framing would have made of it. What the screen drew before this stays
    behind them. */
 void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 split, f32 modelScale, s32 battleIdle, f32 modelYOffset)
+{
     u32 *dma = gDmaCur;
     s32 vif = gDmaVif1Started;
     ChrViewCommon *res;
