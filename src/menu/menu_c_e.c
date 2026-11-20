@@ -1573,13 +1573,25 @@ if (bgm == CHARSEL_BGM_RANDOM) {
         }
     }
 
-    for (i = 0; i < CHARSEL_FLASH_NUM; i++) {
-    if (i == 0 &&
-        (gCharSel->flags & CHARSEL_STAGE_PHASE) &&
-        !PortGame_IsBT4() &&
-        PortStageSel_Enabled()) {
-        continue;
+    
+#ifdef PORT
+    /*
+     * The custom stage selector replaces the original Flash presentation.
+     * Keep all Flash state updates above, but do not draw the old screen.
+     */
+    if (!((gCharSel->flags & CHARSEL_STAGE_PHASE) &&
+          !PortGame_IsBT4() &&
+          PortStageSel_Enabled())) {
+        for (i = 0; i < CHARSEL_FLASH_NUM; i++) {
+            Flash_Draw(&gCharSel->flash[i]);
+        }
     }
+#else
+    for (i = 0; i < CHARSEL_FLASH_NUM; i++) {
+        Flash_Draw(&gCharSel->flash[i]);
+    }
+#endif
+
 
     Flash_Draw(&gCharSel->flash[i]);
     }
