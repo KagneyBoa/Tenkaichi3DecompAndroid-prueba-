@@ -669,6 +669,16 @@ void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 spl
             sPortChara[side] = chara[side];
             sPortCostume[side] = costume[side];
         }
+                /* Change the hold animation without reloading the fighter. */
+        if (sPortAnimId[side] != motionId) {
+            if (sPortView[side]->cur != NULL) {
+                ChrView_PortSetAnim(side, sPortView[side]->cur, motionId);
+            }
+            if (sPortNew[side] != NULL) {
+                ChrView_PortSetAnim(side, sPortNew[side], motionId);
+            }
+            sPortAnimId[side] = motionId;
+        }
         if (sPortNew[side] != NULL && sPortCount[side]++ >= 3) {
             ChrViewSlot *fresh = sPortNew[side];
 
@@ -702,9 +712,8 @@ void ChrView_PortFrame(f32 *screenX, f32 *yaw, s32 *chara, s32 *costume, s32 spl
             f32 scale = 1.0f;
 
             if (!sPortStanding[side] && BtlObjAnim_PortStopped(obj)) {
-                BtlObjAnim_PortPlay(obj, sPortMotion[side][cur - gChrView->slot], 0x181, 2);
-                sPortStanding[side] = 1;
-            }
+    ChrView_PortSetAnim(side, cur, motionId);
+}
             if (info != NULL) {
                 f32 a;
                 f32 b;
