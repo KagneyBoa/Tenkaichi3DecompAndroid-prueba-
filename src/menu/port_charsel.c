@@ -1424,14 +1424,15 @@ void PortCharSel_DrawStage(void) {
     /* Render both selected fighters facing each other. */
     if (Port_NetListShown()) {
         ChrView_PortFrame(
-            screenX,
-            stageYaw,
-            sShownChara,
-            sShownCostume,
-                        1,
-            1.25f,
-            1
-        );
+    screenX,
+    stageYaw,
+    sShownChara,
+    sShownCostume,
+    1,
+    1.25f,
+    1,
+    0.50f
+);
     }
 }
 
