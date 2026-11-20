@@ -870,6 +870,29 @@ static GsTex tbo_texture(uint32_t id) {
             h = (uint32_t)nativeH;
             snprintf(path, sizeof(path), "EU disc PZS3EU0.AFS selector texture %u", (unsigned)id);
         }
+    
+    } else if (id == TBO_STAGE_MENU_BG) {
+        /* Custom stage selector background. */
+        const char *relative = "port_stagesel/decorations/fondo_menu.png";
+        char cwd[768];
+
+        base = SDL_GetBasePath();
+        snprintf(path, sizeof(path), "%s%s", base != NULL ? base : "", relative);
+        png = SDL_LoadPNG(path);
+
+        if (png == NULL) {
+            if (getcwd(cwd, sizeof(cwd)) != NULL) {
+                snprintf(path, sizeof(path), "%s/%s", cwd, relative);
+            } else {
+                snprintf(path, sizeof(path), "%s", relative);
+            }
+            png = SDL_LoadPNG(path);
+        }
+
+        if (png == NULL) {
+            snprintf(path, sizeof(path), "assets/port_stagesel/decorations/fondo_menu.png");
+            png = SDL_LoadPNG(path);
+        }
     } else {
         base = SDL_GetBasePath();
         snprintf(path, sizeof(path), "%stbo/ui/%s.png", base != NULL ? base : "", kTboNames[id]);
@@ -890,6 +913,7 @@ static GsTex tbo_texture(uint32_t id) {
             png = SDL_LoadPNG(path);
         }
     }
+
     rgba = png != NULL ? SDL_ConvertSurface(png, SDL_PIXELFORMAT_RGBA32) : NULL;
     if (png != NULL) {
         SDL_DestroySurface(png);
