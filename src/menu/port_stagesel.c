@@ -191,15 +191,7 @@ cellW = (gridWidth - gap * 3.0f) / 4.0f;
 
     Port_GsMarker(0x24);
 
-    /* Original stage preview and its cross-fade. */
-if ((gCharSel->flags & CHARSEL_STAGE_READY) &&
-    gCharSel->bg[1] != NULL) {
-    Sprite_DrawPicture(gCharSel->bg[1], 0, 0, gCharSel->bgAlpha[1]);
-}
 
-if (gCharSel->bg[0] != NULL) {
-    Sprite_DrawPicture(gCharSel->bg[0], 0, 0, gCharSel->bgAlpha[0]);
-}
 
     /* Blue tint over the preview. */
     StageSel_Rect(
