@@ -143,9 +143,21 @@ static void StageSel_DrawThumbnail(s32 id, f32 x, f32 y, f32 w, f32 h) {
 }
 /* Read the selected menu when the stage selector begins. */
 void PortStageSel_Begin(void) {
+    u32 roll;
+
     sEnabled = !Port_Setting("stage_menu_classic", 0);
     sAspectActive = 0;
     sVisiblePage = 0;
+
+    roll = StageSel_Random() % 100;
+
+    if (roll < 5) {
+        sCornerRightArt = TBO_STAGE_CORNER_RIGHT_EGG_K;
+    } else if (roll < 10) {
+        sCornerRightArt = TBO_STAGE_CORNER_RIGHT_EGG_S;
+    } else {
+        sCornerRightArt = TBO_STAGE_CORNER_RIGHT;
+    }
 }
 
 /* End the alternative menu session. */
