@@ -63,15 +63,11 @@ static void StageSel_Frame(f32 x0, f32 y0, f32 x1, f32 y1, u32 color) {
     StageSel_Rect(x0, y0, x0 + 1.0f, y1, color);
     StageSel_Rect(x1 - 1.0f, y0, x1, y1, color);
 }
-/* Draw one stage thumbnail, preserving its original texture proportions. */
-static void StageSel_DrawThumbnail(s32 id, f32 x, f32 y, f32 w, f32 h) {
+/* Draw one stage thumbnail, preserving its original */
+    static void StageSel_DrawThumbnail(s32 id, f32 x, f32 y, f32 w, f32 h) {
     s32 icon;
     s32 texW;
     s32 texH;
-    s32 drawW;
-    s32 drawH;
-    s32 drawX;
-    s32 drawY;
     u64 tex0;
     MTexRes *res;
     LoadSprite sprites[2];
@@ -93,22 +89,11 @@ static void StageSel_DrawThumbnail(s32 id, f32 x, f32 y, f32 w, f32 h) {
     texW = 1 << ((tex0 >> 26) & 0xF);
     texH = 1 << ((tex0 >> 30) & 0xF);
 
-    drawH = (s32)h;
-    drawW = drawH * texW / texH;
-
-    if (drawW > (s32)w) {
-        drawW = (s32)w;
-        drawH = drawW * texH / texW;
-    }
-
-    drawX = (s32)(x + (w - drawW) * 0.5f);
-    drawY = (s32)(y + (h - drawH) * 0.5f);
-
     sprites[0].flags = LOAD_SPR_DRAW;
     sprites[0].x0 = 0;
     sprites[0].y0 = 0;
-    sprites[0].x1 = (s32)StageSel_X(drawW);
-    sprites[0].y1 = drawH;
+    sprites[0].x1 = (s32)StageSel_X(w);
+    sprites[0].y1 = (s32)h;
     sprites[0].u0 = 0;
     sprites[0].v0 = 0;
     sprites[0].u1 = texW;
@@ -136,8 +121,8 @@ static void StageSel_DrawThumbnail(s32 id, f32 x, f32 y, f32 w, f32 h) {
 
     Sprite_DrawList(
         (SpriteRes *)res,
-        (s32)StageSel_X(drawX),
-        drawY,
+        (s32)StageSel_X(x),
+        (s32)y,
         sprites
     );
 }
