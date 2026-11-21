@@ -875,9 +875,12 @@ static GsTex tbo_texture(uint32_t id) {
            id == TBO_STAGE_CORNER_LEFT ||
            id == TBO_STAGE_CORNER_RIGHT ||
            id == TBO_STAGE_CORNER_RIGHT_EGG_K ||
-           id == TBO_STAGE_CORNER_RIGHT_EGG_S) {
+           id == TBO_STAGE_CORNER_RIGHT_EGG_S ||
+           id == TBO_STAGE_FRAME) {
     const char *filename =
-        id == TBO_STAGE_MENU_BG || id == TBO_STAGE_MENU_EDGE
+    id == TBO_STAGE_FRAME
+        ? "marco_mapa.png"
+        : id == TBO_STAGE_MENU_BG || id == TBO_STAGE_MENU_EDGE
             ? "fondo_menu.png"
             : id == TBO_STAGE_CORNER_LEFT
                 ? "esqsup_izq.png"
