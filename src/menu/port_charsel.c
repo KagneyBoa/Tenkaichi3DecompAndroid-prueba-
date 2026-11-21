@@ -1063,7 +1063,7 @@ void PortCharSel_MuteOn(void) {
 
 /* Once a frame, before the screen is drawn: what it shows now, which models are wanted, and the 3D view on or off. */
 void PortCharSel_Frame(const CsView *view, s32 split, s32 stagePhase) {
-    s32 scene = s3D && PortCharSel_Shown(stagePhase);
+    s32 scene = s3D && (stagePhase || PortCharSel_Shown(stagePhase));
     s32 i;
 
     sSplit = split != 0;
