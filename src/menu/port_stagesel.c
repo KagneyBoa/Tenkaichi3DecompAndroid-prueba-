@@ -5,6 +5,7 @@
 #include "menu/port_screen.h"
 #include "battle/col_c.h"
 #include "menu/tbo_art.h"
+#include <time.h>
 
 extern void Font_PrintAsciiAt(s32 x, s32 y, char *str);
 extern void Font_FlushAll(void);
