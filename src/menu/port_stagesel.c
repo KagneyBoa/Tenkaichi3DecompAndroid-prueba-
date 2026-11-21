@@ -322,22 +322,22 @@ gUiSongH = 14;
     }
 
 
-            /* Top decorations: preserve their original proportions on every aspect ratio. */
-    Ps_SpriteScreen(
-        TBO_STAGE_CORNER_LEFT,
-        StageSel_X(0.0f), 0.0f,
-        StageSel_X(180.0f), 127.3f,
-        0.0f, 0.0f, 1.0f, 1.0f,
-        PS_PLAIN, 0x80
-    );
+            /* Top decorations: preserve proportions on every aspect ratio. */
+Ps_SpriteScreen(
+    TBO_STAGE_CORNER_LEFT,
+    StageSel_X(0.0f), 0.0f,
+    StageSel_X(225.0f), 159.1f,
+    0.0f, 0.0f, 1.0f, 1.0f,
+    PS_PLAIN, 0x80
+);
 
-        Ps_SpriteScreen(
-        TBO_STAGE_CORNER_RIGHT,
-        StageSel_X(sCanvasW - 126.7f), 0.0f,
-        StageSel_X(sCanvasW), 128.2f,
-        0.0f, 0.0f, 1.0f, 1.0f,
-        PS_PLAIN, 0x80
-    );
+Ps_SpriteScreen(
+    TBO_STAGE_CORNER_RIGHT,
+    StageSel_X(sCanvasW - 158.4f), 0.0f,
+    StageSel_X(sCanvasW), 160.3f,
+    0.0f, 0.0f, 1.0f, 1.0f,
+    PS_PLAIN, 0x80
+);
 
     Port_GsMarker(0x25);
 }
