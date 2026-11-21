@@ -869,9 +869,8 @@ static GsTex tbo_texture(uint32_t id) {
             w = (uint32_t)nativeW;
             h = (uint32_t)nativeH;
             snprintf(path, sizeof(path), "EU disc PZS3EU0.AFS selector texture %u", (unsigned)id);
-        }
-    
-        } else if (id == TBO_STAGE_MENU_BG ||
+                }
+    } else if (id == TBO_STAGE_MENU_BG ||
                id == TBO_STAGE_MENU_EDGE ||
                id == TBO_STAGE_CORNER_LEFT ||
                id == TBO_STAGE_CORNER_RIGHT) {
