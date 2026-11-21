@@ -273,7 +273,7 @@ PortCharSel_DrawStage();
     for (row = 0; row < 3; row++) {
         for (col = 0; col < 4; col++) {
             f32 x = gridX + (f32)col * (cellW + gap);
-f32 y = 292.0f + (f32)row * 52.0f;
+f32 y = 292.0f + (f32)row * 48.0f;
             s32 index = pageStart + col + row * 4;
 s32 id;
 
