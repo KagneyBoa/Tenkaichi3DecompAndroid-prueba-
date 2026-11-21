@@ -935,6 +935,20 @@ static GsTex tbo_texture(uint32_t id) {
             const uint8_t *c = row + x * 4;
             uint32_t imageAlpha = c[3];
             uint32_t a;
+                       if (id == TBO_STAGE_MENU_EDGE) {
+                float nx = ((float)x / (float)(w - 1)) * 2.0f - 1.0f;
+                float ny = ((float)y / (float)(h - 1)) * 2.0f - 1.0f;
+                float dx = nx / 0.58f;
+                float dy = ny / 0.76f;
+                float radius = sqrtf(dx * dx + dy * dy);
+                float fade = (radius - 0.78f) / (1.0f - 0.78f);
+
+                if (fade < 0.0f) fade = 0.0f;
+                if (fade > 1.0f) fade = 1.0f;
+
+                fade = fade * fade * (3.0f - 2.0f * fade);
+                imageAlpha = (uint32_t)((float)imageAlpha * fade + 0.5f);
+                       }
             /* The original arrow textures use 127 for their solid pixels. Preserve the antialiased edge while
                bringing the chevron itself up to full opacity over the green selection bar. */
             if (languageArt && id != TBO_LANG_BG) {
