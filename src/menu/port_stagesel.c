@@ -322,5 +322,20 @@ gUiSongH = 14;
     }
 
 
+        /* Top decorations: drawn last, above the entire selector. */
+    Ps_SpriteScreen(
+        TBO_STAGE_CORNER_LEFT,
+        0.0f, 0.0f, 210.0f, 127.3f,
+        0.0f, 0.0f, 1.0f, 1.0f,
+        PS_PLAIN, 0x80
+    );
+
+    Ps_SpriteScreen(
+        TBO_STAGE_CORNER_RIGHT,
+        364.0f, 0.0f, 512.0f, 128.2f,
+        0.0f, 0.0f, 1.0f, 1.0f,
+        PS_PLAIN, 0x80
+    );
+
     Port_GsMarker(0x25);
 }
