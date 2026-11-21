@@ -209,10 +209,10 @@ void PortStageSel_Draw(void) {
     sCanvasW = 512.0f * (f32)Port_AspectMilli() / 1333.0f;
 
     margin = 18.0f;
-gap = 10.0f;
+gap = 6.0f;
 
-/* Compact centered grid. */
-gridWidth = sCanvasW * 0.60f;
+/* Wider centered grid. */
+gridWidth = sCanvasW * 0.75f;
 gridX = (sCanvasW - gridWidth) * 0.5f;
 cellW = (gridWidth - gap * 3.0f) / 4.0f;
 
@@ -277,7 +277,7 @@ PortCharSel_DrawStage();
     for (row = 0; row < 3; row++) {
         for (col = 0; col < 4; col++) {
             f32 x = gridX + (f32)col * (cellW + gap);
-f32 y = 294.0f + (f32)row * 50.0f;
+f32 y = 292.0f + (f32)row * 52.0f;
             s32 index = pageStart + col + row * 4;
 s32 id;
 
@@ -289,7 +289,7 @@ id = gCharSel->stageIds[index];
 
             if (index == selected) {
                 StageSel_Rect(
-                    x, y, x + cellW, y + 44.0f,
+                    x, y, x + cellW, y + 48.0f,
                     Ps_Rgba(35, 112, 205, 220)
                 );
 
@@ -311,12 +311,11 @@ id = gCharSel->stageIds[index];
 
             StageSel_DrawThumbnail(
     id,
-    x + 2.0f,
+    x + 3.0f,
     y + 2.0f,
-    cellW - 4.0f,
-    40.0f
+    cellW - 6.0f,
+    44.0f
 );
-        }
     }
 
         
