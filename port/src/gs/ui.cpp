@@ -3502,16 +3502,41 @@ bool overlay = nameOn || songOn;
             float x = (float)gUiPresentX + (float)gUiNameX * sx;
             float y = (float)gUiPresentY + (float)gUiNameY * sy;
 
-            if (fn != NULL) {
+            
+            {
                 float kx = (float)gUiNameW * sx / 384.0f;
                 float ky = (float)gUiNameH * sy / 48.0f;
-                font_draw(dl, fn, x - 64.0f * kx,
-                          y + (1.5f - 14.0f) * ky, kx, ky, true);
-            } else {
-                name_text(dl, stageName, x, y,
-                          (float)gUiNameW * sx,
-                          (float)gUiNameH * sy, true);
+                float scale = (kx < ky ? kx : ky) * 0.82f;
+                float centerX = x + 192.0f * kx;
+
+                if (fn != NULL) {
+                    font_draw(
+                        dl,
+                        fn,
+                        centerX - 256.0f * scale,
+                        y + (1.5f - 14.0f) * ky - 8.0f * sy,
+                        scale,
+                        scale,
+                        true
+                    );
+                } else {
+                    float boxW = (float)gUiNameW * sx;
+                    float boxH = (float)gUiNameH * sy;
+                    float titleW = boxW * 0.82f;
+                    float titleH = boxH * 0.82f;
+
+                    name_text(
+                        dl,
+                        stageName,
+                        centerX - titleW * 0.5f,
+                        y - 8.0f * sy + (boxH - titleH) * 0.5f,
+                        titleW,
+                        titleH,
+                        true
+                    );
+                }
             }
+
         }
 
         if (songOn) {
