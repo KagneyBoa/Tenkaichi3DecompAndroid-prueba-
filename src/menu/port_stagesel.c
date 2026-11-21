@@ -220,26 +220,7 @@ for (row = 0; row < 2; row++) {
 }
 
     /* Header. */
-    StageSel_Rect(
-        0, 0, sCanvasW, 43,
-        Ps_Rgba(3, 19, 54, 220)
-    );
-
-    StageSel_Rect(
-        0, 42, sCanvasW, 44,
-        Ps_Rgba(85, 177, 255, 170)
-    );
-
-    /* Bottom gallery panel. */
-    StageSel_Rect(
-        0, 286, sCanvasW, 448,
-        Ps_Rgba(3, 12, 34, 238)
-    );
-
-    StageSel_Rect(
-        margin - 6.0f, 285, sCanvasW - margin + 6.0f, 287,
-        Ps_Rgba(48, 137, 224, 180)
-    );
+    
     /* Draw the fighters behind the stage selection interface. */
 PortCharSel_DrawStage();
 
