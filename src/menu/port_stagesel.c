@@ -358,7 +358,7 @@ Ps_SpriteScreen(
 );
 
 Ps_SpriteScreen(
-    TBO_STAGE_CORNER_RIGHT,
+    sCornerRightArt,
     StageSel_X(sCanvasW - 158.4f), 0.0f,
     StageSel_X(sCanvasW), 160.3f,
     0.0f, 0.0f, 1.0f, 1.0f,
