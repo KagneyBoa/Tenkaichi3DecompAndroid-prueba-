@@ -28,6 +28,19 @@ static s32 sEnabled;
 static s32 sAspectActive;
 static s32 sVisiblePage = 0;
 static f32 sCanvasW = 512.0f;
+static u32 sEggRandomState;
+static s32 sCornerRightArt = TBO_STAGE_CORNER_RIGHT;
+static u32 StageSel_Random(void) {
+    if (sEggRandomState == 0) {
+        sEggRandomState = (u32)time(NULL) ^ (u32)clock() ^ 0xA53C91E7u;
+    }
+
+    sEggRandomState ^= sEggRandomState << 13;
+    sEggRandomState ^= sEggRandomState >> 17;
+    sEggRandomState ^= sEggRandomState << 5;
+
+    return sEggRandomState;
+}
 
 /* Convert the responsive design coordinates to the game's 512-wide buffer. */
 static f32 StageSel_X(f32 x) {
