@@ -309,8 +309,8 @@ id = gCharSel->stageIds[index];
     id,
     x + 2.0f,
     y + 2.0f,
-    cellW - 4.0f,
-    40.0f
+cellW - 4.0f,
+36.0f
 );
         }
     }
