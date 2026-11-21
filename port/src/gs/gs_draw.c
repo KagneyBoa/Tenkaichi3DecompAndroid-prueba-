@@ -872,10 +872,27 @@ static GsTex tbo_texture(uint32_t id) {
         }
     
     } else if (id == TBO_STAGE_MENU_BG ||
-           id == TBO_STAGE_MENU_EDGE) {
-        /* Custom stage selector background. */
-        const char *relative = "port_stagesel/decorations/fondo_menu.png";
+        } else if (id == TBO_STAGE_MENU_BG ||
+               id == TBO_STAGE_MENU_EDGE ||
+               id == TBO_STAGE_CORNER_LEFT ||
+               id == TBO_STAGE_CORNER_RIGHT) {
+        const char *filename =
+            id == TBO_STAGE_MENU_BG || id == TBO_STAGE_MENU_EDGE
+                ? "fondo_menu.png"
+                : id == TBO_STAGE_CORNER_LEFT
+                    ? "esqsup_izq.png"
+                    : "esqsup_der.png";
+
+        const char *relative;
         char cwd[768];
+
+        snprintf(
+            path,
+            sizeof(path),
+            "port_stagesel/decorations/%s",
+            filename
+        );
+        relative = path;
 
         base = SDL_GetBasePath();
         snprintf(path, sizeof(path), "%s%s", base != NULL ? base : "", relative);
@@ -884,6 +901,21 @@ static GsTex tbo_texture(uint32_t id) {
         if (png == NULL) {
             if (getcwd(cwd, sizeof(cwd)) != NULL) {
                 snprintf(path, sizeof(path), "%s/%s", cwd, relative);
+            } else {
+                snprintf(path, sizeof(path), "%s", relative);
+            }
+            png = SDL_LoadPNG(path);
+        }
+
+        if (png == NULL) {
+            snprintf(
+                path,
+                sizeof(path),
+                "assets/port_stagesel/decorations/%s",
+                filename
+            );
+            png = SDL_LoadPNG(path);
+        }
             } else {
                 snprintf(path, sizeof(path), "%s", relative);
             }
