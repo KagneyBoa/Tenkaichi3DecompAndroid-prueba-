@@ -938,10 +938,10 @@ static GsTex tbo_texture(uint32_t id) {
                        if (id == TBO_STAGE_MENU_EDGE) {
                 float nx = ((float)x / (float)(w - 1)) * 2.0f - 1.0f;
                 float ny = ((float)y / (float)(h - 1)) * 2.0f - 1.0f;
-                float dx = nx / 0.58f;
-                float dy = ny / 0.76f;
-                float radius = sqrtf(dx * dx + dy * dy);
-                float fade = (radius - 0.78f) / (1.0f - 0.78f);
+                float dx = nx / 0.72f;
+float dy = ny / 0.88f;
+float radius = sqrtf(dx * dx + dy * dy);
+float fade = (radius - 0.70f) / (1.22f - 0.70f);
 
                 if (fade < 0.0f) fade = 0.0f;
                 if (fade > 1.0f) fade = 1.0f;
