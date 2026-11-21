@@ -294,17 +294,17 @@ id = gCharSel->stageIds[index];
                 );
 
                 StageSel_Frame(
-                    x, y, x + cellW, y + 44.0f,
+                    x, y, x + cellW, y + 48.0f,
                     Ps_Rgba(130, 205, 255, 230)
                 );
             } else {
                 StageSel_Rect(
-                    x, y, x + cellW, y + 44.0f,
+                    x, y, x + cellW, y + 48.0f,
                     Ps_Rgba(13, 42, 79, 210)
                 );
 
                 StageSel_Frame(
-                    x, y, x + cellW, y + 44.0f,
+                    x, y, x + cellW, y + 48.0f,
                     Ps_Rgba(63, 117, 174, 150)
                 );
             }
