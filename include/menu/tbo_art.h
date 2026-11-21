@@ -42,7 +42,9 @@ X(TBO_STORM_BOLT, "storm_bolt")         /* four lightning bolts side by side, 25
                         X(TBO_STAGE_MENU_BG, "stage_menu_bg")  /* custom stage selector background */ \
         X(TBO_STAGE_MENU_EDGE, "stage_menu_edge") /* radial edge overlay */ \
         X(TBO_STAGE_CORNER_LEFT, "stage_corner_left") /* upper-left cloud decoration */ \
-        X(TBO_STAGE_CORNER_RIGHT, "stage_corner_right") /* upper-right moon decoration */
+        X(TBO_STAGE_CORNER_RIGHT, "stage_corner_right") /* upper-right moon decoration */ \
+X(TBO_STAGE_CORNER_RIGHT_EGG_K, "stage_corner_right_egg_k") /* secret moon K */ \
+X(TBO_STAGE_CORNER_RIGHT_EGG_S, "stage_corner_right_egg_s")
 
 #define TBO_ART_ENUM(id, name) id,
 enum { TBO_ART_LIST(TBO_ART_ENUM) TBO_ART_COUNT };
