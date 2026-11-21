@@ -882,16 +882,15 @@ static GsTex tbo_texture(uint32_t id) {
                     ? "esqsup_izq.png"
                     : "esqsup_der.png";
 
-        const char *relative;
+        char relative[256];
         char cwd[768];
 
         snprintf(
-            path,
-            sizeof(path),
-            "port_stagesel/decorations/%s",
-            filename
-        );
-        relative = path;
+    relative,
+    sizeof(relative),
+    "port_stagesel/decorations/%s",
+    filename
+);
 
         base = SDL_GetBasePath();
         snprintf(path, sizeof(path), "%s%s", base != NULL ? base : "", relative);
