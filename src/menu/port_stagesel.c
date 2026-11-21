@@ -331,10 +331,13 @@ gUiSongH = 14;
         PS_PLAIN, 0x80
     );
 
-    Ps_SpriteScreen(
+        Ps_SpriteScreen(
         TBO_STAGE_CORNER_RIGHT,
         StageSel_X(sCanvasW - 126.7f), 0.0f,
         StageSel_X(sCanvasW), 128.2f,
         0.0f, 0.0f, 1.0f, 1.0f,
         PS_PLAIN, 0x80
     );
+
+    Port_GsMarker(0x25);
+}
