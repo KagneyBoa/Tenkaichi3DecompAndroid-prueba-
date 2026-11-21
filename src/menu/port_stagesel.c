@@ -312,10 +312,7 @@ id = gCharSel->stageIds[index];
 cellW - 4.0f,
 36.0f
 );
-        }
-    }
-
-        /* Slightly desaturate the stage thumbnail. */
+            /* Slightly desaturate the stage thumbnail. */
 StageSel_Rect(
     x + 2.0f,
     y + 2.0f,
@@ -323,6 +320,10 @@ StageSel_Rect(
     y + 38.0f,
     Ps_Rgba(128, 128, 128, 65)
 );
+        }
+    }
+
+        
         
     /*
      * Music selector panel.
