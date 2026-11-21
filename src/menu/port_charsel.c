@@ -1064,9 +1064,15 @@ void PortCharSel_MuteOn(void) {
 /* Once a frame, before the screen is drawn: what it shows now, which models are wanted, and the 3D view on or off. */
 void PortCharSel_Frame(const CsView *view, s32 split, s32 stagePhase) {
     s32 scene = s3D && (stagePhase || PortCharSel_Shown(stagePhase));
-    s32 i;
+s32 nextSplit = split != 0;
+s32 i;
 
-    sSplit = split != 0;
+/* The viewer must be rebuilt when changing from one fighter to two. */
+if (sInScene && s3D && sSplit != nextSplit) {
+    ChrView_PortEnd();
+}
+
+sSplit = nextSplit;
     sViews[0] = view[0];
     if (sSplit) {
         sViews[1] = view[1];
