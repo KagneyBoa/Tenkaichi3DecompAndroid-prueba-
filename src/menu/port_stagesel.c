@@ -305,7 +305,19 @@ id = gCharSel->stageIds[index];
     }
 
         
-    
+        /*
+     * Frame around the twelve stage thumbnails.
+     * The music selector remains outside the frame.
+     */
+    Ps_SpriteScreen(
+        TBO_STAGE_FRAME,
+        StageSel_X(gridX - 8.0f),
+        284.0f,
+        StageSel_X(gridX + gridWidth + 8.0f),
+        448.0f,
+        0.0f, 0.0f, 1.0f, 1.0f,
+        PS_PLAIN, 0x80
+    );
     /*
      * Music selector panel.
      */
