@@ -218,7 +218,13 @@ for (row = 0; row < 2; row++) {
         );
     }
 }
-
+    /* Blend the stage preview into the decorative background. */
+    Ps_SpriteScreen(
+        TBO_STAGE_MENU_EDGE,
+        0, 0, 512, 448,
+        0.0f, 0.0f, 1.0f, 1.0f,
+        PS_PLAIN, 0x80
+    );
     /* Header. */
     
     /* Draw the fighters behind the stage selection interface. */
