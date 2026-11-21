@@ -315,7 +315,14 @@ cellW - 4.0f,
         }
     }
 
-        
+        /* Slightly desaturate the stage thumbnail. */
+StageSel_Rect(
+    x + 2.0f,
+    y + 2.0f,
+    x + cellW - 2.0f,
+    y + 38.0f,
+    Ps_Rgba(128, 128, 128, 65)
+);
         
     /*
      * Music selector panel.
