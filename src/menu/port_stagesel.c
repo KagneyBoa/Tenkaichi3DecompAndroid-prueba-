@@ -193,11 +193,10 @@ void PortStageSel_Draw(void) {
      */
     sCanvasW = 512.0f * (f32)Port_AspectMilli() / 1333.0f;
 
-    margin = 18.0f;
-gap = 12.0f;
+ margin = 18.0f;
+gap = 8.0f;
 
-/* Compact centered grid. */
-gridWidth = sCanvasW * 0.60f;
+gridWidth = sCanvasW * 0.56f;
 gridX = (sCanvasW - gridWidth) * 0.5f;
 cellW = (gridWidth - gap * 3.0f) / 4.0f;
 
