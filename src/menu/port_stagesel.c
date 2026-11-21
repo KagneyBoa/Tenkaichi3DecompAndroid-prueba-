@@ -265,7 +265,7 @@ PortCharSel_DrawStage();
         StageSel_X(gridX - 8.0f),
         284.0f,
         StageSel_X(gridX + gridWidth + 8.0f),
-        448.0f,
+        436.0f,
         0.0f, 0.0f, 1.0f, 1.0f,
         PS_PLAIN, 0x80
     );
