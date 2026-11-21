@@ -871,7 +871,6 @@ static GsTex tbo_texture(uint32_t id) {
             snprintf(path, sizeof(path), "EU disc PZS3EU0.AFS selector texture %u", (unsigned)id);
         }
     
-    } else if (id == TBO_STAGE_MENU_BG ||
         } else if (id == TBO_STAGE_MENU_BG ||
                id == TBO_STAGE_MENU_EDGE ||
                id == TBO_STAGE_CORNER_LEFT ||
@@ -914,16 +913,6 @@ static GsTex tbo_texture(uint32_t id) {
                 "assets/port_stagesel/decorations/%s",
                 filename
             );
-            png = SDL_LoadPNG(path);
-        }
-            } else {
-                snprintf(path, sizeof(path), "%s", relative);
-            }
-            png = SDL_LoadPNG(path);
-        }
-
-        if (png == NULL) {
-            snprintf(path, sizeof(path), "assets/port_stagesel/decorations/fondo_menu.png");
             png = SDL_LoadPNG(path);
         }
     } else {
