@@ -309,13 +309,14 @@ id = gCharSel->stageIds[index];
                 );
             }
 
-            StageSel_DrawThumbnail(
+                        StageSel_DrawThumbnail(
     id,
     x + 3.0f,
     y + 2.0f,
     cellW - 6.0f,
     44.0f
 );
+        }
     }
 
         
