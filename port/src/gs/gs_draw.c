@@ -871,15 +871,21 @@ static GsTex tbo_texture(uint32_t id) {
             snprintf(path, sizeof(path), "EU disc PZS3EU0.AFS selector texture %u", (unsigned)id);
                 }
     } else if (id == TBO_STAGE_MENU_BG ||
-               id == TBO_STAGE_MENU_EDGE ||
-               id == TBO_STAGE_CORNER_LEFT ||
-               id == TBO_STAGE_CORNER_RIGHT) {
-        const char *filename =
-            id == TBO_STAGE_MENU_BG || id == TBO_STAGE_MENU_EDGE
-                ? "fondo_menu.png"
-                : id == TBO_STAGE_CORNER_LEFT
-                    ? "esqsup_izq.png"
-                    : "esqsup_der.png";
+           id == TBO_STAGE_MENU_EDGE ||
+           id == TBO_STAGE_CORNER_LEFT ||
+           id == TBO_STAGE_CORNER_RIGHT ||
+           id == TBO_STAGE_CORNER_RIGHT_EGG_K ||
+           id == TBO_STAGE_CORNER_RIGHT_EGG_S) {
+    const char *filename =
+        id == TBO_STAGE_MENU_BG || id == TBO_STAGE_MENU_EDGE
+            ? "fondo_menu.png"
+            : id == TBO_STAGE_CORNER_LEFT
+                ? "esqsup_izq.png"
+                : id == TBO_STAGE_CORNER_RIGHT_EGG_K
+                    ? "esqsup_der_eggK.png"
+                    : id == TBO_STAGE_CORNER_RIGHT_EGG_S
+                        ? "esqsup_dereggS.png"
+                        : "esqsup_der.png";
 
         char relative[256];
         char cwd[768];
