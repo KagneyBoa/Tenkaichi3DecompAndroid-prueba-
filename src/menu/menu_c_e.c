@@ -1329,11 +1329,12 @@ if (shown && ref.id >= 0) {
     gPortSongNames[idx]
 );
 
-                    gFontStyle = saved;
+                                        gFontStyle = saved;
                 }
             }
-        } else {
-            uv.y0 = (bgm % 8) * 0x20;
+        }
+    } else {
+        uv.y0 = (bgm % 8) * 0x20;
             uv.y1 = uv.y0 + 0x20;
             uv.unk10 = bgm / 8;
 
