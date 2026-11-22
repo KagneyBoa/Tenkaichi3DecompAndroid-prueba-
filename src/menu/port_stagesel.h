@@ -8,7 +8,6 @@
 void PortStageSel_Begin(void);
 void PortStageSel_End(void);
 s32 PortStageSel_Enabled(void);
-void PortStageSel_SetEnabled(s32 enabled);
 void PortStageSel_Draw(void);
 
 /* Widescreen presentation while the alternative stage menu is active. */
