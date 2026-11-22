@@ -130,7 +130,7 @@ static void StageSel_Frame(f32 x0, f32 y0, f32 x1, f32 y1, u32 color) {
 void PortStageSel_Begin(void) {
     u32 roll;
 
-    sEnabled = !Port_Setting("stage_menu_classic", 0);
+    sEnabled = PortCharSel_Enabled();
     sAspectActive = 0;
     sVisiblePage = 0;
 
