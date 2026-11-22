@@ -1278,9 +1278,7 @@ void CharSel_Draw(void) {
         s32 cx = 0, cy = 0, px = 0, py = 0;
         s32 have = 0, shown = 0;
 
-        if (!(gCharSel->flags & CHARSEL_STAGE_PHASE)) {
-    /* Do not draw the song name during character selection. */
-} else if (bgm >= PORT_SONG_FIRST_OFFSET && !PortGame_IsBT4()) { {
+        if (bgm >= PORT_SONG_FIRST_OFFSET && !PortGame_IsBT4()) {
             s32 idx = bgm - PORT_SONG_FIRST_OFFSET;
 
             Flash_FindLabel(f, "mc_bgm_now", "mc_bgm_now_text_off", &ref);
