@@ -1358,8 +1358,9 @@ if (shown && ref.id >= 0) {
             sPortSongNameHidden = 0;
 
             if (!PortGame_IsBT4() &&
+    (gCharSel->flags & CHARSEL_STAGE_PHASE) &&
     PortStageSel_Enabled() &&
-    bgm >= 0 && bgm <= CHARSEL_BGM_RANDOM) {
+    bgm >= 0 && bgm <= CHARSEL_BGM_RANDOM) {) {
 
                 cx = 0;
                 cy = 0;
