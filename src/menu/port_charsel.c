@@ -1233,18 +1233,20 @@ void PortCharSel_Draw(void) {
     Font_FlushAll();
 }
 /* Draw both selected fighters on the stage selection screen. */
+
+/* Draw both selected fighters on the stage selection screen. */
 void PortCharSel_DrawStage(void) {
     f32 screenX[2] = { 80.0f, 432.0f };
     f32 stageYaw[2] = {
-        sYawOf[0] - 1.5707963f,
-        sYawOf[1] + 1.5707963f
+        -1.5707963f,
+        1.5707963f
     };
 
     if (!sOn || !s3D || !sInScene) {
         return;
     }
 
-    /* Render both selected fighters facing each other. */
+    /* Keep both fighters at a fixed orientation on the stage selector. */
     if (Port_NetListShown()) {
         ChrView_PortFrame(
             screenX,
@@ -1258,6 +1260,7 @@ void PortCharSel_DrawStage(void) {
         );
     }
 }
+
 /* The item panel over everything (after the game's panel's movie, which is not shown). */
 void PortCharSel_DrawItems(void) {
     s32 i;
