@@ -37,6 +37,7 @@ typedef struct CsView {
 } CsView;
 
 void PortCharSel_Begin(s32 allow);
+s32 PortCharSel_Enabled(void);
 void PortCharSel_End(void);
 void PortCharSel_Abandon(void);
 s32 PortCharSel_Shown(s32 stagePhase);
