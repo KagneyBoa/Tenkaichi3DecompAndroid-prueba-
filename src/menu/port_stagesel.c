@@ -19,8 +19,7 @@ extern volatile int gUiSongX, gUiSongY, gUiSongW, gUiSongH;
 #undef SYS_LOADING_NO_PROGRESS_EXTERN
 
 /* Settings functions provided by port/src/plat_settings.c. */
-extern int Port_Setting(const char *name, int def);
-extern void Port_SettingSave(const char *name, int value);
+
 extern void Port_GsMarker(s32 effect);
 extern int Port_AspectMilli(void);
 
@@ -155,11 +154,7 @@ s32 PortStageSel_Enabled(void) {
     return sEnabled;
 }
 
-/* Change and save the user's choice. */
-void PortStageSel_SetEnabled(s32 enabled) {
-    sEnabled = enabled != 0;
-    Port_SettingSave("stage_menu_classic", !sEnabled);
-}
+
 
 /* Tell the port when this menu needs its own aspect ratio. */
 void PortStageSel_SetAspectActive(s32 active) {
