@@ -1024,7 +1024,9 @@ void PortCharSel_Begin(s32 allow) {
         sFormCell[i] = -1;
     }
 }
-
+s32 PortCharSel_Enabled(void) {
+    return sOn;
+}
 /* Right before the screen's Term (and before the battle is set up). */
 void PortCharSel_End(void) {
     if (sInScene) {
