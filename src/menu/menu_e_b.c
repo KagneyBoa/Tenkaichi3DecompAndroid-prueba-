@@ -1084,7 +1084,9 @@ static void TeamSel_PortFill(CsView *v, s32 side) {
 static void TeamSel_PortFrame(void) {
     CsView v[2];
 
-    if (gTeamSel->players == 1 && !TagSession_Selected()) {
+    if (!TagSession_Selected() &&
+    (TEAMSEL_PORT_STAGE() ||
+     gTeamSel->players == TEAMSEL_PLAYERS_TWO)) {
         TeamSel_PortFill(&v[0], 0);
         TeamSel_PortFill(&v[1], 1);
         PortCharSel_Frame(v, 1, TEAMSEL_PORT_STAGE());
